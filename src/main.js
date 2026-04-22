@@ -1,6 +1,10 @@
 ﻿import './style.css';
 
 const API_URL = 'https://open.er-api.com/v6/latest/CNY';
+// 汇率本地缓存时长（小时）。免费 API 一般每天更新一次，12h 足够。
+const RATE_CACHE_HOURS = 12;
+// 用户手动刷新汇率次数上限（每 RATE_CACHE_HOURS 内）。防止误触刷爆免费 API 配额。
+const MANUAL_REFRESH_LIMIT = 2;
 let htmlToImageModulePromise = null;
 
 const currencySymbols = {
@@ -14,9 +18,7 @@ const els = {
     currency: document.getElementById('currency'),
     cycles: document.getElementsByName('cycle'),
     dueDate: document.getElementById('dueDate'),
-    dueDateDisplay: document.getElementById('dueDateDisplay'),
     tradeDate: document.getElementById('tradeDate'),
-    tradeDateDisplay: document.getElementById('tradeDateDisplay'),
     customRate: document.getElementById('customRate'),
     apiRateDisplay: document.getElementById('apiRateDisplay'),
     refreshBtn: document.getElementById('refreshRateBtn'),
@@ -49,13 +51,11 @@ function setupEventListeners() {
     const debouncedSave = debounce(saveInputsToCookie, 500);
 
     [els.price, els.dueDate, els.tradeDate, els.customRate].forEach(el => el.addEventListener('input', () => {
-        syncDateDisplays();
         calculate();
         debouncedSave();
     }));
 
     [els.dueDate, els.tradeDate].forEach(el => el.addEventListener('change', () => {
-        syncDateDisplays();
         calculate();
         saveInputsToCookie();
     }));
@@ -68,13 +68,56 @@ function setupEventListeners() {
     els.currency.addEventListener('change', () => {
         updateCurrencySymbol();
         initRates(); 
-        syncDateDisplays();
         calculate();
         saveInputsToCookie();
     });
 
     els.refreshBtn.addEventListener('click', manualRefreshRate); 
     els.themeToggle.addEventListener('click', toggleTheme);
+
+    // 点击日期框右侧日历图标，弹出原生日期选择器
+    document.querySelectorAll('.date-input-wrapper .date-input-icon').forEach((icon) => {
+        icon.addEventListener('click', (e) => {
+            const input = icon.parentElement && icon.parentElement.querySelector('input[type="date"]');
+            if (!input) return;
+            e.preventDefault();
+            try {
+                if (typeof input.showPicker === 'function') {
+                    input.showPicker();
+                } else {
+                    input.focus();
+                    input.click();
+                }
+            } catch (err) {
+                input.focus();
+            }
+        });
+    });
+
+    // 价格 / 汇率 输入校验：负数或非法时高亮红边
+    [els.price, els.customRate].forEach(el => {
+        el.addEventListener('input', () => validateNumberInput(el));
+        validateNumberInput(el);
+    });
+
+    // ESC 关闭模态 / 限流提示
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (!modal.el.classList.contains('hidden')) closeImageModal();
+        if (els.rateLimitTip.classList.contains('show')) hideRateLimitTip();
+    });
+}
+
+function validateNumberInput(el) {
+    const raw = el.value.trim();
+    if (raw === '') {
+        el.classList.remove('input-invalid');
+        return true;
+    }
+    const v = parseFloat(raw);
+    const ok = Number.isFinite(v) && v >= 0;
+    el.classList.toggle('input-invalid', !ok);
+    return ok;
 }
 
 function debounce(func, wait) {
@@ -111,6 +154,8 @@ function updateToggleUI(isDark) {
     }
 }
 
+// 注意：函数名沿用历史命名（setCookie / getCookie），实际底层是 localStorage + 过期时间，
+// 同时兼容旧版本可能写到 document.cookie 的数据。
 function setCookie(name, value, hours) {
     const expiresAt = Date.now() + (hours * 60 * 60 * 1000);
     localStorage.setItem(name, JSON.stringify({ value, expiresAt }));
@@ -157,20 +202,23 @@ function formatDateForDisplay(value) {
     return value ? value.replace(/-/g, '/') : '--/--/--';
 }
 
-function syncDateDisplays() {
-    els.dueDateDisplay.textContent = formatDateForDisplay(els.dueDate.value);
-    els.tradeDateDisplay.textContent = formatDateForDisplay(els.tradeDate.value);
-}
-
 function prepareDateInputsForExport(node) {
     const restoreTasks = [];
-    const nativeInputs = node.querySelectorAll('.date-native');
+    const inputs = node.querySelectorAll('input[type="date"]');
 
-    nativeInputs.forEach((input) => {
+    inputs.forEach((input) => {
+        const wrapper = input.parentElement;
+        if (!wrapper) return;
+        const display = document.createElement('div');
+        // 复制原输入框的外观类，去掉 outline 相关
+        display.className = input.className + ' flex items-center';
+        display.textContent = formatDateForDisplay(input.value);
         input.style.display = 'none';
+        wrapper.insertBefore(display, input);
 
         restoreTasks.push(() => {
             input.style.display = '';
+            display.remove();
         });
     });
 
@@ -274,13 +322,13 @@ async function manualRefreshRate(isUserClick = true) {
             if (parsed.resetTime && Date.now() < parsed.resetTime) {
                 limitData = parsed;
             } else {
-                limitData = { count: 0, resetTime: Date.now() + 12*3600*1000 };
+                limitData = { count: 0, resetTime: Date.now() + RATE_CACHE_HOURS*3600*1000 };
             }
         } catch(e) {}
     }
 
     if (isUserClick) {
-        if (limitData.count >= 2) {
+        if (limitData.count >= MANUAL_REFRESH_LIMIT) {
             showRateLimitTip();
             return;
         }
@@ -302,16 +350,16 @@ async function fetchExchangeRate() {
         const data = await response.json();
         
         if (data.result === "success") {
-            const baseInCNY = data.rates[base];
-            if (baseInCNY) {
+            const baseInCNY = data.rates && data.rates[base];
+            if (typeof baseInCNY === 'number' && baseInCNY > 0 && Number.isFinite(baseInCNY)) {
                 const rate = 1 / baseInCNY;
                 finishRateUpdate(rate, rate.toFixed(4));
                 
                 const cacheData = JSON.stringify({ rate: rate, time: Date.now() });
-                setCookie(`vps_rate_${base}`, cacheData, 12);
+                setCookie(`vps_rate_${base}`, cacheData, RATE_CACHE_HOURS);
                 saveInputsToCookie();
             } else {
-                throw new Error("Currency not found");
+                throw new Error("Invalid rate value");
             }
         } else {
             throw new Error("API Error");
@@ -347,8 +395,6 @@ function hideRateLimitTip() {
     }
 }
 
-window.hideRateLimitTip = hideRateLimitTip;
-
 function showToast(msg) {
     els.toast.textContent = msg;
     els.toast.classList.add('show');
@@ -381,17 +427,25 @@ function formatDate(date) {
 
 function updateCurrencySymbol() {
     const code = els.currency.value;
-    els.symbolDisplay.textContent = currencySymbols[code] || code;
+    const sym = currencySymbols[code] || code;
+    els.symbolDisplay.textContent = sym;
+    // Dynamically adjust input left padding to prevent symbol/text overlap
+    requestAnimationFrame(() => {
+        const symRect = els.symbolDisplay.getBoundingClientRect();
+        const inputRect = els.price.getBoundingClientRect();
+        const neededPad = symRect.right - inputRect.left + 6;
+        els.price.style.paddingLeft = Math.max(neededPad, 32) + 'px';
+    });
 }
 
 function calculate() {
-    syncDateDisplays();
-
-    const price = parseFloat(els.price.value) || 0;
-    const rate = parseFloat(els.customRate.value) || 0;
+    const priceRaw = parseFloat(els.price.value);
+    const rateRaw = parseFloat(els.customRate.value);
+    const price = Number.isFinite(priceRaw) && priceRaw >= 0 ? priceRaw : 0;
+    const rate = Number.isFinite(rateRaw) && rateRaw > 0 ? rateRaw : 0;
     const due = new Date(els.dueDate.value);
     const trade = new Date(els.tradeDate.value);
-    
+
     let cycleDays = 365;
     for (const radio of els.cycles) {
         if (radio.checked) { cycleDays = parseInt(radio.value); break; }
@@ -400,35 +454,47 @@ function calculate() {
     const totalCNY = price * rate;
     els.priceCNYPreview.textContent = `≈${totalCNY.toFixed(2)}元`;
 
-    if (isNaN(due.getTime()) || isNaN(trade.getTime())) return;
+    // 空 / 非法日期：清空结果区，给出占位提示
+    if (isNaN(due.getTime()) || isNaN(trade.getTime())) {
+        els.finalValue.textContent = '0.00';
+        els.originalCurrencyValue.textContent = '请填写到期日 / 交易日';
+        els.daysRemaining.textContent = '--';
+        els.progressBar.style.width = '0%';
+        els.progressText.textContent = '--';
+        return;
+    }
 
     const diffTime = due - trade;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const dailyPrice = price / cycleDays;
-    
-    let valOrig = 0, valCNY = 0, progress = 0;
+    const dailyPrice = cycleDays > 0 ? price / cycleDays : 0;
 
-    if (diffDays <= 0) {
-        valOrig = 0; valCNY = 0; progress = 0; 
-    } else {
+    let valOrig = 0, valCNY = 0;
+
+    if (diffDays > 0) {
         valOrig = dailyPrice * diffDays;
         valCNY = valOrig * rate;
-        let baseDays = cycleDays;
-        if (diffDays > cycleDays) {
-            baseDays = cycleDays * Math.ceil(diffDays / cycleDays);
-        }
-        progress = (diffDays / baseDays) * 100;
     }
-    
-    let visualProgress = progress;
-    if (visualProgress > 100) visualProgress = 100;
-    if (visualProgress < 0) visualProgress = 0;
 
-    els.progressBar.style.width = `${visualProgress}%`;
+    // 进度条语义：当前续费周期内的「剩余比例」
+    // 当剩余天数 > 一个周期：满格 100%（已续多个周期），文字额外标注 "+N 周期"
+    let progressPct;
+    let extraCycles = 0;
+    if (diffDays <= 0) {
+        progressPct = 0;
+    } else if (diffDays >= cycleDays) {
+        progressPct = 100;
+        extraCycles = Math.floor(diffDays / cycleDays);
+    } else {
+        progressPct = (diffDays / cycleDays) * 100;
+    }
+
+    els.progressBar.style.width = `${progressPct}%`;
     els.finalValue.textContent = valCNY.toFixed(2);
     els.originalCurrencyValue.textContent = `≈ ${valOrig.toFixed(2)} ${els.currency.value}`;
-    els.daysRemaining.textContent = diffDays > 0 ? diffDays : "0";
-    els.progressText.textContent = `${progress.toFixed(1)}%`;
+    els.daysRemaining.textContent = diffDays > 0 ? diffDays : '0';
+    els.progressText.textContent = extraCycles > 0
+        ? `100% (+${extraCycles}周期)`
+        : `${progressPct.toFixed(1)}%`;
 }
 
 function copyResult() {
@@ -450,20 +516,49 @@ function copyResult() {
     }
 
     const cnyPrice = (parseFloat(price) * parseFloat(rate)).toFixed(2);
-    const md = `## VPS 剩余价值
-- 交易日期：${tradeDate}
-- 外币汇率：1 ${currency} ≈ ${rate} CNY
-- 续费价格：${price} ${currency}/${cycleText}（约${cnyPrice}元）
-- 剩余天数：${days}天（${dueDate} 到期）
-- 剩余价值：${valCNY}元（约${valOrig} ${currency}）`;
+    const md = `🐔 VPS 剩余价值
+📅 交易日期：${tradeDate}
+💹 外币汇率：1 ${currency} ≈ ${rate} CNY
+💰 续费价格：${price} ${currency}/${cycleText}（约${cnyPrice}元）
+⏳ 剩余天数：${days}天（${dueDate} 到期）
+💎 剩余价值：${valCNY}元（约${valOrig} ${currency}）`;
 
-    const textArea = document.createElement("textarea");
-    textArea.value = md;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-    showToast("已复制到剪贴板");
+    const fallbackCopy = () => {
+        const textArea = document.createElement("textarea");
+        textArea.value = md;
+        textArea.setAttribute('readonly', '');
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try { document.execCommand("copy"); } catch (_) {}
+        document.body.removeChild(textArea);
+    };
+
+    const done = () => {
+        flashCopyButton();
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(md).then(done).catch(() => { fallbackCopy(); done(); });
+    } else {
+        fallbackCopy();
+        done();
+    }
+}
+
+function flashCopyButton() {
+    const btn = document.getElementById('copyBtn');
+    if (!btn) return;
+    const label = btn.querySelector('span');
+    const originalText = label ? label.textContent : '';
+    btn.classList.add('btn-copied');
+    if (label) label.textContent = '已复制 ✓';
+    clearTimeout(flashCopyButton._t);
+    flashCopyButton._t = setTimeout(() => {
+        btn.classList.remove('btn-copied');
+        if (label) label.textContent = originalText;
+    }, 1500);
 }
 
 const modal = {
@@ -502,6 +597,7 @@ async function generateImage() {
     setTimeout(async () => {
         const node = document.getElementById('mainCard');
         const isDark = document.documentElement.classList.contains('dark');
+        node.classList.add('exporting');
         const restoreDateInputs = prepareDateInputsForExport(node);
         const restoreSelectInputs = prepareSelectInputsForExport(node);
 
@@ -532,15 +628,27 @@ async function generateImage() {
         } finally {
             restoreSelectInputs();
             restoreDateInputs();
+            node.classList.remove('exporting');
         }
     }, 100);
 }
 
-// Expose functions to global scope for HTML onclick attributes
-window.copyResult = copyResult;
-window.generateImage = generateImage;
-window.closeImageModal = closeImageModal;
-window.hideRateLimitTip = hideRateLimitTip;
-window.manualRefreshRate = manualRefreshRate;
-window.toggleTheme = toggleTheme;
+// 用 addEventListener 绑定（替代 inline onclick），保持 HTML 与逻辑解耦
+function bindActionButtons() {
+    const map = [
+        ['copyBtn', copyResult],
+        ['imgBtn', generateImage],
+        ['closeImageModalBtn', closeImageModal],
+    ];
+    for (const [id, fn] of map) {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', fn);
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindActionButtons);
+} else {
+    bindActionButtons();
+}
 

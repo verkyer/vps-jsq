@@ -7,6 +7,20 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* \u8f93\u5165\u6846\u975e\u6cd5\u72b6\u6001\uff08\u8d1f\u6570 / \u975e\u6570\u5b57\uff09 */
+.input-invalid {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25) !important;
+}
+
+/* \u590d\u5236\u6210\u529f\u540e\u7684\u6309\u94ae\u53cd\u9988 */
+.btn-copied {
+    background-color: #f59e0b !important;
+    border-color: #f59e0b !important;
+    color: #ffffff !important;
+}
+.btn-copied svg { color: #ffffff !important; }
+
 /* Dark Mode Background */
 html.dark body {
     background-color: #050505;
@@ -80,83 +94,77 @@ body:not(.dark) .text-amber-600 {
     box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
 
-/* Date Input Customization for Dark Mode */
+/* Date Input Customization */
 .date-input-wrapper {
     position: relative;
 }
 
-.date-display {
-    position: relative;
-    z-index: 1;
+.date-native-input {
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: inherit;
 }
 
-.date-input-icon {
-    z-index: 2;
-}
-
-.date-display-value {
-    display: block;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.date-native {
-    z-index: 3;
-}
-
-.date-native::-webkit-calendar-picker-indicator {
-    position: absolute;
-    inset: 0;
-    width: 100%;
+/* 隐藏原生日历图标但保留位置（仅右侧 24px），以便左侧可打字输入 */
+.date-native-input::-webkit-calendar-picker-indicator {
+    width: 20px;
     height: 100%;
     margin: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.date-native::-webkit-datetime-edit,
-.date-native::-webkit-datetime-edit-fields-wrapper,
-.date-native::-webkit-datetime-edit-text,
-.date-native::-webkit-datetime-edit-month-field,
-.date-native::-webkit-datetime-edit-day-field,
-.date-native::-webkit-datetime-edit-year-field {
+    padding: 0;
     color: transparent;
-}
-
-.date-native::-moz-calendar-picker-indicator {
+    background: transparent;
+    cursor: pointer;
     opacity: 0;
 }
 
-.date-native::-moz-focus-inner {
-    border: 0;
+.date-native-input::-webkit-inner-spin-button,
+.date-native-input::-webkit-clear-button {
+    display: none;
 }
 
-.dark .date-native {
+html.dark .date-native-input {
     color-scheme: dark;
 }
 
 /* Toast Notification Animation */
-#toast, #rateLimitTip {
+#toast {
     visibility: hidden;
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
+    transform: translateX(-50%) translateY(20px);
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-#toast.show, #rateLimitTip.show {
+#toast.show {
     visibility: visible;
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-#toast {
-    transform: translateX(-50%) translateY(20px);
-}
-
-#toast.show {
     transform: translateX(-50%) translateY(0);
+}
+
+/* Rate limit small inline tip */
+.rate-limit-tip {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+.rate-limit-tip.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 下拉框文本中间对齐（可视上偏左一点点以补偿箭头区域） */
+.select-centered {
+    text-align: left;
+    text-align-last: left;
+}
+.select-centered option {
+    text-align: left;
+}
+
+/* 生成图片时隐藏右侧顶部多余间距（仅 mobile） */
+#mainCard.exporting #resultCard {
+    padding-top: 12px;
 }
 
 /* Spin Animation */

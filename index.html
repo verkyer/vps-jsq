@@ -18,7 +18,7 @@
                 </h1>
             </div>
             
-            <button id="themeToggle" class="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-300 dark:bg-zinc-700 transition-colors focus:outline-none shadow-inner" title="切换深色/浅色模式">
+            <button id="themeToggle" type="button" aria-label="切换深色/浅色模式" class="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-300 dark:bg-zinc-700 transition-colors focus:outline-none shadow-inner" title="切换深色/浅色模式">
                 <span id="themeToggleKnob" class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200 translate-x-1 dark:translate-x-6 flex items-center justify-center">
                     <!-- Moon Icon -->
                     <svg class="w-3 h-3 text-slate-600 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
@@ -28,33 +28,48 @@
             </button>
         </div>
 
-        <div id="mainCard" class="relative rounded-xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 shadow-xl dark:shadow-none metal-card-border metal-card-top-line bg-white dark:bg-[#18181b] border border-slate-200 dark:border-zinc-700">
+        <div id="mainCard" class="relative rounded-xl overflow-hidden flex flex-col md:flex-row transition-all duration-300 shadow-xl dark:shadow-none metal-card-border metal-card-top-line bg-white dark:bg-[#26262b] border border-slate-200 dark:border-zinc-700">
             
             <!-- 左侧：输入区域，移动端 padding 改为 p-3 (12px) -->
-            <section class="w-full md:w-[60%] p-3 md:p-8 border-b md:border-b-0 md:border-r border-slate-200 dark:border-zinc-700/50 bg-slate-50 dark:bg-[#18181b] transition-colors">
+            <section class="w-full md:w-[60%] p-3 md:p-8 border-b md:border-b-0 md:border-r border-slate-200 dark:border-zinc-700/50 bg-slate-50 dark:bg-[#26262b] transition-colors">
                 <form id="calcForm" class="space-y-3 md:space-y-6">
                     
                     <div class="flex flex-row gap-3 md:gap-6">
-                        <div class="w-[60%] group">
+                        <div class="w-[55%] group">
                             <div class="flex justify-between items-end mb-1 md:mb-2 h-4">
-                                <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors">💰 续费金额</label>
-                                <span id="priceCNYPreview" class="text-[10px] md:text-xs font-mono text-slate-400 dark:text-zinc-500 font-bold leading-none transition-colors whitespace-nowrap">≈0.00元</span>
+                                <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <rect x="3" y="6" width="18" height="12" rx="2.5" fill="#fbbf24"/>
+                                        <path d="M3 10.5h18" stroke="#92400e" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
+                                        <rect x="5.5" y="8.3" width="6.2" height="2.4" rx="1.2" fill="#fde68a"/>
+                                        <path d="M7.5 15h4M14 15h2.5M16.5 12.8h2" stroke="#92400e" stroke-width="1.3" stroke-linecap="round"/>
+                                    </svg>
+                                    续费金额
+                                </label>
+                                <span id="priceCNYPreview" class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase leading-none transition-colors whitespace-nowrap mr-1 md:mr-1.5">≈0.00元</span>
                             </div>
                             <div class="relative">
                                 <span class="symbol-display absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 font-mono text-base md:text-lg z-10 pointer-events-none transition-colors">$</span>
-                                <input type="number" id="price" step="0.01" 
-                                    class="w-full h-10 md:h-12 pl-8 md:pl-10 pr-2 md:pr-4 rounded text-base md:text-xl font-mono font-medium tracking-wide transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500 dark:focus:ring-0" 
+                                <input type="number" id="price" step="1" 
+                                    class="w-full h-10 md:h-12 pl-8 md:pl-10 pr-2 md:pr-4 rounded text-base md:text-xl font-mono font-medium tracking-wide transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500 dark:focus:ring-0" 
                                     placeholder="0.00">
                             </div>
                         </div>
 
-                        <div class="w-[40%] group">
+                        <div class="w-[45%] group">
                             <div class="flex justify-between items-end mb-1 md:mb-2 h-4">
-                                <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors">📊 币种</label>
+                                <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="9" fill="#fbbf24"/>
+                                        <circle cx="12" cy="12" r="6.5" fill="none" stroke="#92400e" stroke-width="0.7" opacity=".4"/>
+                                        <path d="M9 8.5l3 4 3-4M9 12.5h6M10 14.5h4M12 14.5v2.5" stroke="#92400e" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    币种
+                                </label>
                             </div>
                             <div class="relative">
                                 <select id="currency" 
-                                    class="w-full h-10 md:h-12 pl-2 md:pl-4 pr-8 rounded text-sm md:text-base font-medium cursor-pointer appearance-none transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500">
+                                    class="select-centered w-full h-10 md:h-12 pl-2 md:pl-4 pr-8 rounded text-sm md:text-base font-medium cursor-pointer appearance-none transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500">
                                     <option value="CNY">CNY 人民币</option>
                                     <option value="USD" selected>USD 美元</option>
                                     <option value="EUR">EUR 欧元</option>
@@ -76,56 +91,85 @@
                     </div>
 
                     <div>
-                        <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 block transition-colors">📅 付款周期</label>
+                        <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 transition-colors">
+                            <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <rect x="3" y="5" width="18" height="16" rx="2" fill="#3b82f6"/>
+                                <rect x="3" y="5" width="18" height="5" fill="#ef4444"/>
+                                <rect x="6.5" y="3" width="2" height="4" rx="0.6" fill="#fbbf24"/>
+                                <rect x="15.5" y="3" width="2" height="4" rx="0.6" fill="#fbbf24"/>
+                                <rect x="6" y="13" width="3" height="2" rx="0.4" fill="white" opacity=".9"/>
+                                <rect x="10.5" y="13" width="3" height="2" rx="0.4" fill="white" opacity=".7"/>
+                                <rect x="15" y="13" width="3" height="2" rx="0.4" fill="white" opacity=".7"/>
+                            </svg>
+                            付款周期
+                        </label>
                         <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 md:gap-3">
-                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="30" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">月付</div></label>
-                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="90" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">季付</div></label>
-                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="180" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">半年</div></label>
-                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="365" class="cycle-radio sr-only" checked><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">年付</div></label>
-                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="730" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">两年</div></label>
-                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="1095" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">三年</div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="30" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">月付</div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="90" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">季付</div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="180" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">半年</div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="365" class="cycle-radio sr-only" checked><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">年付</div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="730" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">两年</div></label>
+                            <label class="cursor-pointer relative"><input type="radio" name="cycle" value="1095" class="cycle-radio sr-only"><div class="py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500">三年</div></label>
                         </div>
                     </div>
 
                     <div class="flex flex-row gap-3 md:gap-6">
                         <div class="w-1/2 group">
-                            <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 block group-focus-within:text-amber-500 transition-colors">⌛ 到期日期</label>
+                            <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 group-focus-within:text-amber-500 transition-colors">
+                                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <rect x="4" y="5" width="16" height="15" rx="2.5" fill="#fbbf24"/>
+                                    <path d="M4 9.5h16" stroke="#92400e" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+                                    <path d="M8 3.5v3M16 3.5v3" stroke="#92400e" stroke-width="1.4" stroke-linecap="round"/>
+                                    <circle cx="12" cy="14" r="3.2" fill="#fff7ed"/>
+                                    <path d="M12 12.4v1.8l1.3.9" stroke="#92400e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                到期日期
+                            </label>
                             <div class="relative date-input-wrapper">
-                                <div class="date-display w-full h-10 md:h-12 pl-2 md:pl-4 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500 flex items-center">
-                                    <span id="dueDateDisplay" class="date-display-value">--/--/--</span>
-                                </div>
-                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-600 dark:text-white/95 pointer-events-none">
+                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-2 md:pl-4 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-600 dark:text-white/95 cursor-pointer">
                                     <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2v4m8-4v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
                                     </svg>
                                 </span>
-                                <input type="date" id="dueDate" class="date-native absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                         </div>
                         <div class="w-1/2 group">
-                            <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 block group-focus-within:text-amber-500 transition-colors">🤝 交易日期</label>
+                            <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 group-focus-within:text-amber-500 transition-colors">
+                                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9-9-9z" fill="#22c55e"/>
+                                    <circle cx="8" cy="8" r="1.7" fill="white"/>
+                                </svg>
+                                交易日期
+                            </label>
                             <div class="relative date-input-wrapper">
-                                <div class="date-display w-full h-10 md:h-12 pl-2 md:pl-4 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#0f0f11] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500 flex items-center">
-                                    <span id="tradeDateDisplay" class="date-display-value">--/--/--</span>
-                                </div>
-                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-600 dark:text-white/95 pointer-events-none">
+                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-2 md:pl-4 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-600 dark:text-white/95 cursor-pointer">
                                     <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2v4m8-4v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
                                     </svg>
                                 </span>
-                                <input type="date" id="tradeDate" class="date-native absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-between pt-3 md:pt-5 border-t border-slate-200 dark:border-zinc-800 transition-colors">
                         <div class="flex items-center gap-2 md:gap-3">
-                            <span class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 font-bold uppercase transition-colors">💹 CNY 汇率</span>
+                            <span class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 font-bold uppercase transition-colors flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M3 17l6-6 4 4 8-8" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 7h7v7" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                CNY 汇率
+                            </span>
                             <input type="number" id="customRate" step="0.0001" class="w-16 md:w-24 text-sm md:text-base font-mono font-bold text-center border-b outline-none py-1 transition-colors bg-transparent border-slate-400 text-amber-600 focus:border-amber-500 dark:border-zinc-600 dark:text-amber-500 dark:focus:border-amber-500" placeholder="0.00">
                         </div>
                         
                         <div class="flex items-center gap-2 md:gap-3 relative">
-                            <button type="button" id="refreshRateBtn" class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 hover:text-amber-500 transition-colors flex items-center gap-1.5">
+                            <div id="rateLimitTip" role="alert" class="rate-limit-tip bg-amber-500 text-white dark:text-black text-[10px] md:text-xs font-bold px-2 py-1 rounded shadow-lg pointer-events-none whitespace-nowrap">
+                                请勿频繁刷新
+                            </div>
+                            <button type="button" id="refreshRateBtn" aria-label="刷新汇率" title="刷新汇率" class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 hover:text-amber-500 transition-colors flex items-center gap-1.5">
                                 <span id="apiRateDisplay" class="hidden sm:inline">--</span>
                                 <!-- Refresh Icon (SVG) with id for JS targeting -->
                                 <svg id="refreshIcon" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
@@ -138,31 +182,40 @@
             </section>
 
             <!-- 右侧：结果展示，移动端 padding 改为 p-3 (12px) -->
-            <section id="resultCard" class="w-full md:w-[40%] bg-white dark:bg-[#0f0f11] p-3 md:p-8 flex flex-col relative transition-colors duration-300">
+            <section id="resultCard" class="w-full md:w-[40%] bg-white dark:bg-[#1d1d22] p-3 md:p-8 flex flex-col relative transition-colors duration-300">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-100/50 dark:from-zinc-800/20 via-transparent to-transparent opacity-50 pointer-events-none transition-colors"></div>
 
                 <!-- 增加 px-1 (4px) 左右间隙 -->
-                <div class="relative z-10 w-full flex-1 flex flex-col justify-center px-1">
+                <div class="relative z-10 w-full flex-1 flex flex-col justify-start md:justify-center px-1">
                     <div class="text-right mb-1">
                         <h2 class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 uppercase tracking-widest font-bold mb-1 transition-colors">剩余价值 (RMB)</h2>
                         <div class="flex items-baseline justify-end gap-1">
                             <span class="text-2xl md:text-3xl text-slate-500 dark:text-zinc-600 font-light transition-colors">¥</span>
                             <span id="finalValue" class="text-4xl md:text-6xl lg:text-7xl font-mono font-bold value-glow tracking-tighter leading-none transition-colors whitespace-nowrap">0.00</span>
                         </div>
-                        <div id="originalCurrencyValue" class="text-xs md:text-sm text-slate-500 dark:text-zinc-600 font-mono mt-0 transition-colors whitespace-nowrap">≈ 0.00 USD</div>
+                        <div id="originalCurrencyValue" class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase leading-none mt-1 transition-colors whitespace-nowrap">≈0.00 USD</div>
                     </div>
 
                     <div class="w-full h-px bg-slate-200 dark:bg-zinc-800 my-2 md:my-4 transition-colors"></div>
 
                     <div class="mb-2">
                         <div class="flex items-center justify-between mb-1 md:mb-2">
-                            <div class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 font-bold uppercase transition-colors">⏳ 剩余天数</div>
-                            <div id="progressText" class="text-[10px] md:text-xs font-mono text-amber-500 font-bold">0%</div>
+                            <div class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 font-bold uppercase transition-colors flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M7 3h10v1.5c0 2.5-2 4-5 5.5-3-1.5-5-3-5-5.5V3z" fill="#f59e0b"/>
+                                    <path d="M7 21h10v-1.5c0-2.5-2-4-5-5.5-3 1.5-5 3-5 5.5V21z" fill="#3b82f6"/>
+                                    <rect x="6" y="2.2" width="12" height="1.3" rx="0.6" fill="#78716c"/>
+                                    <rect x="6" y="20.5" width="12" height="1.3" rx="0.6" fill="#78716c"/>
+                                    <path d="M12 10.5c-1.2-.7-2.5-1.6-3.3-2.7h6.6C14.5 8.9 13.2 9.8 12 10.5z" fill="#fcd34d" opacity=".7"/>
+                                </svg>
+                                剩余天数
+                            </div>
+                            <div id="progressText" class="text-[10px] md:text-xs font-bold uppercase leading-none transition-colors whitespace-nowrap text-amber-500">0%</div>
                         </div>
                         
                         <div class="flex items-center gap-3">
                             <div class="whitespace-nowrap text-xl md:text-2xl font-mono text-slate-700 dark:text-zinc-200 leading-none transition-colors">
-                                <span id="daysRemaining">0</span> <span class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-600 ml-0.5">DAYS</span>
+                                <span id="daysRemaining">0</span><span class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase leading-none transition-colors whitespace-nowrap ml-1">DAYS</span>
                             </div>
                             <div class="flex-1 progress-container h-2 md:h-1.5 rounded-full overflow-hidden transition-colors bg-slate-200 dark:bg-zinc-800">
                                 <div id="progressBar" class="progress-fill h-full w-0 transition-all duration-700 ease-out rounded-full"></div>
@@ -172,12 +225,12 @@
                 </div>
 
                 <div id="btnContainer" class="relative z-10 mt-2 md:mt-auto pt-2 flex justify-center gap-3">
-                    <button id="copyBtn" onclick="copyResult()" title="复制 Markdown 格式" class="w-full md:w-auto px-6 py-2 rounded border transition-all flex items-center justify-center gap-2 group bg-slate-50 border-slate-300 text-slate-500 hover:bg-white hover:text-amber-500 hover:border-amber-400 dark:bg-zinc-800/50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-amber-500 dark:hover:border-amber-500/50 text-xs">
+                    <button type="button" id="copyBtn" title="复制详情文本" class="w-full md:w-auto px-6 py-2 rounded border transition-all flex items-center justify-center gap-2 group bg-slate-50 border-slate-300 text-slate-500 hover:bg-white hover:text-amber-500 hover:border-amber-400 dark:bg-zinc-800/50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-amber-500 dark:hover:border-amber-500/50 text-xs">
                         <!-- Copy Icon (SVG) -->
                         <svg class="w-3 h-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        <span>复制详情</span>
+                        <span>复制文本</span>
                     </button>
-                    <button id="imgBtn" onclick="generateImage()" title="生成 SVG 图片" class="w-full md:w-auto px-6 py-2 rounded border transition-all flex items-center justify-center gap-2 group bg-slate-50 border-slate-300 text-slate-500 hover:bg-white hover:text-amber-500 hover:border-amber-400 dark:bg-zinc-800/50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-amber-500 dark:hover:border-amber-500/50 text-xs">
+                    <button type="button" id="imgBtn" title="生成分享图片" class="w-full md:w-auto px-6 py-2 rounded border transition-all flex items-center justify-center gap-2 group bg-slate-50 border-slate-300 text-slate-500 hover:bg-white hover:text-amber-500 hover:border-amber-400 dark:bg-zinc-800/50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-amber-500 dark:hover:border-amber-500/50 text-xs">
                         <!-- Image Icon (SVG) -->
                         <svg class="w-3 h-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span>生成图片</span>
@@ -189,14 +242,14 @@
         </div>
 
         <div class="mt-2 text-center">
-            <span class="text-[10px] md:text-sm text-slate-400 dark:text-zinc-600 font-mono transition-colors">Ver 1.2.2 // By <a href="https://www.xiaoge.org/" target="_blank" class="hover:text-amber-500 transition-colors">XiaoGe</a>. <a href="https://github.com/verkyer/vps-jsq" target="_blank" class="hover:text-amber-500 transition-colors">vps-jsq</a></span>
+            <span class="text-[10px] md:text-sm text-slate-400 dark:text-zinc-600 font-mono transition-colors">Ver 1.2.3 // By <a href="https://www.xiaoge.org/" target="_blank" class="hover:text-amber-500 transition-colors">XiaoGe</a>. <a href="https://github.com/verkyer/vps-jsq" target="_blank" class="hover:text-amber-500 transition-colors">vps-jsq</a></span>
         </div>
 
     </main>
 
-    <div id="imageModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300 opacity-0">
+    <div id="imageModal" role="dialog" aria-modal="true" aria-label="生成的分享图片" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300 opacity-0">
         <div class="relative w-full max-w-4xl flex flex-col items-center">
-            <button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-amber-500 transition-colors text-2xl p-2">
+            <button type="button" id="closeImageModalBtn" aria-label="关闭预览" class="absolute -top-12 right-0 text-white hover:text-amber-500 transition-colors text-2xl p-2">
                 <!-- X Icon -->
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -216,18 +269,6 @@
                     长按图片保存或复制
                 </p>
             </div>
-        </div>
-    </div>
-
-    <div id="rateLimitTip" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-500/80 backdrop-blur-sm text-white px-8 py-5 rounded-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] text-base font-bold tracking-wider z-50 text-center min-w-[240px] border border-white/20">
-        <button onclick="hideRateLimitTip()" class="absolute top-2 right-3 text-white/70 hover:text-white transition-colors text-sm" title="关闭">
-            <!-- X Icon -->
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-        <div class="flex items-center justify-center text-lg font-bold">
-            <!-- Warning Icon -->
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            请勿频繁刷新
         </div>
     </div>
 
