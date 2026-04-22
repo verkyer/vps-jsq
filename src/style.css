@@ -23,10 +23,10 @@ body {
 
 /* Dark Mode Background */
 html.dark body {
-    background-color: #050505;
+    background-color: #17171c;
     background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(to bottom, #0f0f11, #050505);
+        radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, #1e1e24, #17171c);
     background-size: 20px 20px, 100% 100%;
     background-attachment: fixed;
 }
@@ -94,32 +94,102 @@ body:not(.dark) .text-amber-600 {
     box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
 }
 
+/* Hide number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 /* Date Input Customization */
 .date-input-wrapper {
     position: relative;
 }
 
 .date-native-input {
-    appearance: none;
-    -webkit-appearance: none;
     font-family: inherit;
-}
-
-/* 隐藏原生日历图标但保留位置（仅右侧 24px），以便左侧可打字输入 */
-.date-native-input::-webkit-calendar-picker-indicator {
-    width: 20px;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    color: transparent;
-    background: transparent;
-    cursor: pointer;
-    opacity: 0;
 }
 
 .date-native-input::-webkit-inner-spin-button,
 .date-native-input::-webkit-clear-button {
     display: none;
+}
+
+/* Webkit 原生日历图标：透明但保留点击区 */
+.date-native-input::-webkit-calendar-picker-indicator {
+    width: 20px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: transparent;
+    cursor: pointer;
+    opacity: 0;
+}
+
+/* Firefox 原生日历图标：尝试隐藏（部分版本支持） */
+.date-native-input::-moz-calendar-picker-indicator {
+    display: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    pointer-events: none !important;
+}
+
+/* 默认隐藏遮罩层（非 Firefox 浏览器不需要） */
+.date-input-ff-mask {
+    display: none;
+}
+
+/* Firefox 专用：使用 @-moz-document 精准命中，无需 JS 类名 */
+@-moz-document url-prefix() {
+    /*
+     * 核心方案：wrapper 设为 overflow:hidden，
+     * input 宽度超出 wrapper 30px，
+     * Firefox 原生日历按钮位于 input 最右侧，随超出部分被布局引擎截掉。
+     * 此方案作用于 layout 层，比 clip-path / z-index 更底层，可靠截断 shadow DOM 内容。
+     */
+    .date-input-wrapper {
+        overflow: hidden;
+    }
+    .date-native-input {
+        width: calc(100% + 30px) !important;
+    }
+    /* 补回被截断的右侧边框 + 背景 */
+    .date-input-ff-mask {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 48px;
+        background: #ffffff;
+        border-top: 1px solid #cbd5e1;
+        border-right: 1px solid #cbd5e1;
+        border-bottom: 1px solid #cbd5e1;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        pointer-events: none;
+        z-index: 1;
+    }
+    html.dark .date-input-ff-mask {
+        background: #1d1d22;
+        border-color: #3f3f46;
+    }
+    .group:focus-within .date-input-ff-mask {
+        border-color: #f59e0b;
+    }
+    html.dark .group:focus-within .date-input-ff-mask {
+        border-color: #71717a;
+    }
+    /* SVG 图标置于填充层之上 */
+    .date-input-icon {
+        z-index: 2;
+    }
 }
 
 html.dark .date-native-input {

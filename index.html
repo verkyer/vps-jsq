@@ -76,11 +76,11 @@
                                     <option value="GBP">GBP 英镑</option>
                                     <option value="JPY">JPY 日元</option>
                                     <option value="KRW">KRW 韩元</option>
+                                    <option value="AUD">AUD 澳元</option>
                                     <option value="HKD">HKD 港元</option>
                                     <option value="TWD">TWD 新台币</option>
                                     <option value="CAD">CAD 加拿大元</option>
                                     <option value="SGD">SGD 新加坡元</option>
-                                    <option value="AUD">AUD 澳大利亚元</option>
                                 </select>
                                 <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-zinc-500 text-xs transition-colors">
                                     <!-- Chevron Down Icon -->
@@ -126,9 +126,10 @@
                                 到期日期
                             </label>
                             <div class="relative date-input-wrapper">
-                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-2 md:pl-4 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
-                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-600 dark:text-white/95 cursor-pointer">
-                                    <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-input-ff-mask" aria-hidden="true"></span>
+                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
+                                    <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2v4m8-4v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
                                     </svg>
                                 </span>
@@ -143,9 +144,10 @@
                                 交易日期
                             </label>
                             <div class="relative date-input-wrapper">
-                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-2 md:pl-4 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
-                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-600 dark:text-white/95 cursor-pointer">
-                                    <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-input-ff-mask" aria-hidden="true"></span>
+                                <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
+                                    <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2v4m8-4v4M3 10h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"></path>
                                     </svg>
                                 </span>
@@ -170,7 +172,7 @@
                                 请勿频繁刷新
                             </div>
                             <button type="button" id="refreshRateBtn" aria-label="刷新汇率" title="刷新汇率" class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 hover:text-amber-500 transition-colors flex items-center gap-1.5">
-                                <span id="apiRateDisplay" class="hidden sm:inline">--</span>
+                                <span id="apiRateDisplay" class="hidden sm:inline">汇率刷新</span>
                                 <!-- Refresh Icon (SVG) with id for JS targeting -->
                                 <svg id="refreshIcon" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             </button>

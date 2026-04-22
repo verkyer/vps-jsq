@@ -1,5 +1,10 @@
 ﻿import './style.css';
 
+// Firefox 检测：为 html 添加标识类，供 CSS 针对性处理原生控件差异
+if (typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent)) {
+    document.documentElement.classList.add('is-firefox');
+}
+
 const API_URL = 'https://open.er-api.com/v6/latest/CNY';
 // 汇率本地缓存时长（小时）。免费 API 一般每天更新一次，12h 足够。
 const RATE_CACHE_HOURS = 12;
@@ -75,7 +80,7 @@ function setupEventListeners() {
     els.refreshBtn.addEventListener('click', manualRefreshRate); 
     els.themeToggle.addEventListener('click', toggleTheme);
 
-    // 点击日期框右侧日历图标，弹出原生日期选择器
+    // 点击日期框右侧自定义 SVG 图标时，弹出原生日期选择器（主要为 Firefox 服务，webkit 上透明原生图标也会响应）
     document.querySelectorAll('.date-input-wrapper .date-input-icon').forEach((icon) => {
         icon.addEventListener('click', (e) => {
             const input = icon.parentElement && icon.parentElement.querySelector('input[type="date"]');
@@ -86,7 +91,6 @@ function setupEventListeners() {
                     input.showPicker();
                 } else {
                     input.focus();
-                    input.click();
                 }
             } catch (err) {
                 input.focus();
@@ -210,7 +214,6 @@ function prepareDateInputsForExport(node) {
         const wrapper = input.parentElement;
         if (!wrapper) return;
         const display = document.createElement('div');
-        // 复制原输入框的外观类，去掉 outline 相关
         display.className = input.className + ' flex items-center';
         display.textContent = formatDateForDisplay(input.value);
         input.style.display = 'none';
@@ -343,7 +346,7 @@ async function manualRefreshRate(isUserClick = true) {
 async function fetchExchangeRate() {
     const base = els.currency.value;
     els.refreshIcon.classList.add('spin');
-    els.apiRateDisplay.textContent = "...";
+    els.apiRateDisplay.textContent = "刷新中";
 
     try {
         const response = await fetch(API_URL);
@@ -366,7 +369,7 @@ async function fetchExchangeRate() {
         }
     } catch (error) {
         console.error(error);
-        els.apiRateDisplay.textContent = "ERR";
+        els.apiRateDisplay.textContent = "汇率刷新";
         els.refreshIcon.classList.remove('spin');
         showToast("获取汇率失败");
     }
@@ -374,7 +377,7 @@ async function fetchExchangeRate() {
 
 function finishRateUpdate(rate, text) {
     els.customRate.value = rate.toFixed(4);
-    els.apiRateDisplay.textContent = text;
+    els.apiRateDisplay.textContent = "汇率刷新";
     els.refreshIcon.classList.remove('spin');
     calculate();
 }
