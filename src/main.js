@@ -286,6 +286,8 @@ function prepareNumberInputsForExport(node) {
         display.style.justifyContent = cs.textAlign === 'center'
             ? 'center'
             : (cs.textAlign === 'right' ? 'flex-end' : 'flex-start');
+        // 保留动态计算的左内边距，防止多字符货币符号（如 NT$）在截图时与数值重叠
+        display.style.paddingLeft = cs.paddingLeft;
         display.textContent = input.value || input.placeholder || '';
         input.style.display = 'none';
         input.parentElement && input.parentElement.insertBefore(display, input);
