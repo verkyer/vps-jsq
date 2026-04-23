@@ -97,28 +97,58 @@ body:not(.dark) .text-amber-600 {
 /* Hide number input spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
 }
 input[type="number"] {
     -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: textfield;
 }
 
 /* Date Input Customization */
 .date-input-wrapper {
     position: relative;
+    min-width: 0;
 }
 
-.date-native-input {
-    font-family: inherit;
-}
-
-.date-native-input::-webkit-inner-spin-button,
-.date-native-input::-webkit-clear-button {
+.date-display-value {
     display: none;
 }
 
-/* Webkit 原生日历图标：透明但保留点击区 */
+/*
+ * appearance:none 去除 Samsung Internet / MIUI / 部分 Chromium 衍生浏览器
+ * 渲染的下拉箭头装饰；background-clip:padding-box 防止背景溢出圆角；
+ * min-width:0 防止 input 的 min-content 撑破 flex 父容器（350px 窄屏溢出根因）。
+ */
+.date-native-input {
+    font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+    background-clip: padding-box;
+    min-width: 0;
+}
+
+.date-native-input::-webkit-inner-spin-button,
+.date-native-input::-webkit-outer-spin-button,
+.date-native-input::-webkit-clear-button,
+.date-native-input::-webkit-list-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/*
+ * Webkit 日历指示器：必须显式限定宽度，否则在窄屏下它会占用额外内联空间，
+ * 把 input 撑出 w-1/2 列宽 → 这是 chrome 350px 下右列贴边的根因。
+ */
 .date-native-input::-webkit-calendar-picker-indicator {
     width: 20px;
     height: 100%;
@@ -130,65 +160,78 @@ input[type="number"] {
     opacity: 0;
 }
 
-/* Firefox 原生日历图标：尝试隐藏（部分版本支持） */
-.date-native-input::-moz-calendar-picker-indicator {
-    display: none !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    pointer-events: none !important;
-}
-
-/* 默认隐藏遮罩层（非 Firefox 浏览器不需要） */
+/* 默认隐藏 Firefox 遮罩 */
 .date-input-ff-mask {
     display: none;
 }
 
-/* Firefox 专用：使用 @-moz-document 精准命中，无需 JS 类名 */
-@-moz-document url-prefix() {
-    /*
-     * 核心方案：wrapper 设为 overflow:hidden，
-     * input 宽度超出 wrapper 30px，
-     * Firefox 原生日历按钮位于 input 最右侧，随超出部分被布局引擎截掉。
-     * 此方案作用于 layout 层，比 clip-path / z-index 更底层，可靠截断 shadow DOM 内容。
-     */
-    .date-input-wrapper {
-        overflow: hidden;
-    }
-    .date-native-input {
-        width: calc(100% + 30px) !important;
-    }
-    /* 补回被截断的右侧边框 + 背景 */
-    .date-input-ff-mask {
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 48px;
-        background: #ffffff;
-        border-top: 1px solid #cbd5e1;
-        border-right: 1px solid #cbd5e1;
-        border-bottom: 1px solid #cbd5e1;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        pointer-events: none;
-        z-index: 1;
-    }
-    html.dark .date-input-ff-mask {
-        background: #1d1d22;
-        border-color: #3f3f46;
-    }
-    .group:focus-within .date-input-ff-mask {
-        border-color: #f59e0b;
-    }
-    html.dark .group:focus-within .date-input-ff-mask {
-        border-color: #71717a;
-    }
-    /* SVG 图标置于填充层之上 */
-    .date-input-icon {
-        z-index: 2;
+/*
+ * Firefox 专用方案：原生 date input 作为透明点击层保留交互，
+ * 视觉上改由自绘显示层承担，这样 UA 阴影 DOM 的原生日历图标无论如何渲染都不会露出来。
+ */
+/*
+ * visibility:hidden 是关键：它从渲染树彻底移除元素及其所有伪元素（包括
+ * Firefox UA shadow DOM 里的 ::-moz-calendar-picker-indicator 合成层）。
+ * 不改变 position（保持 static），使 input 仍在正常文档流中撑开 wrapper 的
+ * 高度（来自 h-10 / h-12 Tailwind 类），自绘层再用绝对定位覆盖即可。
+ */
+.is-firefox .date-native-input {
+    visibility: hidden;
+    pointer-events: none;
+}
+.is-firefox .date-input-wrapper {
+    cursor: pointer;
+}
+.is-firefox .date-display-value,
+.date-display-value.date-display-export {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.25rem;
+    pointer-events: none;
+    box-sizing: border-box;
+    z-index: 1;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+    color: #1e293b;
+}
+html.dark.is-firefox .date-display-value,
+html.dark .date-display-value.date-display-export {
+    background: #1d1d22;
+    border-color: #3f3f46;
+    color: #d4d4d8;
+}
+.is-firefox .group:focus-within .date-display-value {
+    border-color: #f59e0b;
+}
+html.dark.is-firefox .group:focus-within .date-display-value {
+    border-color: #71717a;
+}
+.is-firefox .date-input-ff-mask {
+    display: none;
+}
+/* 图标始终在 display 层（z-index:1）上方，覆盖 Firefox 和 Chrome 导出两种场景 */
+.date-input-wrapper .date-input-icon {
+    z-index: 2;
+}
+.is-firefox .date-input-icon {
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+    .is-firefox .date-display-value,
+    .date-display-value.date-display-export {
+        padding-left: 1.25rem;
+        padding-right: 3rem;
     }
 }
 

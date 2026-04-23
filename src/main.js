@@ -47,6 +47,8 @@ window.addEventListener('DOMContentLoaded', () => {
     initTheme();
     loadInputsFromCookie(); 
     initDates(); 
+    syncDateDisplay(els.dueDate);
+    syncDateDisplay(els.tradeDate);
     initRates(); 
     setupEventListeners();
     calculate(); 
@@ -56,11 +58,13 @@ function setupEventListeners() {
     const debouncedSave = debounce(saveInputsToCookie, 500);
 
     [els.price, els.dueDate, els.tradeDate, els.customRate].forEach(el => el.addEventListener('input', () => {
+        if (el.type === 'date') syncDateDisplay(el);
         calculate();
         debouncedSave();
     }));
 
     [els.dueDate, els.tradeDate].forEach(el => el.addEventListener('change', () => {
+        syncDateDisplay(el);
         calculate();
         saveInputsToCookie();
     }));
@@ -80,23 +84,43 @@ function setupEventListeners() {
     els.refreshBtn.addEventListener('click', manualRefreshRate); 
     els.themeToggle.addEventListener('click', toggleTheme);
 
-    // 点击日期框右侧自定义 SVG 图标时，弹出原生日期选择器（主要为 Firefox 服务，webkit 上透明原生图标也会响应）
-    document.querySelectorAll('.date-input-wrapper .date-input-icon').forEach((icon) => {
-        icon.addEventListener('click', (e) => {
-            const input = icon.parentElement && icon.parentElement.querySelector('input[type="date"]');
-            if (!input) return;
-            e.preventDefault();
-            try {
-                if (typeof input.showPicker === 'function') {
-                    input.showPicker();
-                } else {
+    // Firefox：date input 改为 visibility:hidden，不接收点击 → 在 wrapper 上绑定点击来触发 showPicker()
+    // 非 Firefox：原生透明日历指示器在 webkit 上会自己响应点击，同时下面的 icon handler 作为后备
+    if (document.documentElement.classList.contains('is-firefox')) {
+        document.querySelectorAll('.date-input-wrapper').forEach((wrapper) => {
+            wrapper.addEventListener('click', () => {
+                const input = wrapper.querySelector('input[type="date"]');
+                if (!input) return;
+                try {
+                    if (typeof input.showPicker === 'function') {
+                        input.showPicker();
+                    } else {
+                        input.focus();
+                    }
+                } catch (err) {
+                    // ignore
+                }
+            });
+        });
+    } else {
+        // 非 Firefox：点击右侧自定义日历图标触发 picker
+        document.querySelectorAll('.date-input-wrapper .date-input-icon').forEach((icon) => {
+            icon.addEventListener('click', (e) => {
+                const input = icon.parentElement && icon.parentElement.querySelector('input[type="date"]');
+                if (!input) return;
+                e.preventDefault();
+                try {
+                    if (typeof input.showPicker === 'function') {
+                        input.showPicker();
+                    } else {
+                        input.focus();
+                    }
+                } catch (err) {
                     input.focus();
                 }
-            } catch (err) {
-                input.focus();
-            }
+            });
         });
-    });
+    }
 
     // 价格 / 汇率 输入校验：负数或非法时高亮红边
     [els.price, els.customRate].forEach(el => {
@@ -206,6 +230,13 @@ function formatDateForDisplay(value) {
     return value ? value.replace(/-/g, '/') : '--/--/--';
 }
 
+function syncDateDisplay(input) {
+    const wrapper = input && input.parentElement;
+    const display = wrapper && wrapper.querySelector('.date-display-value');
+    if (!display) return;
+    display.textContent = formatDateForDisplay(input.value);
+}
+
 function prepareDateInputsForExport(node) {
     const restoreTasks = [];
     const inputs = node.querySelectorAll('input[type="date"]');
@@ -213,11 +244,51 @@ function prepareDateInputsForExport(node) {
     inputs.forEach((input) => {
         const wrapper = input.parentElement;
         if (!wrapper) return;
-        const display = document.createElement('div');
-        display.className = input.className + ' flex items-center';
+        const display = wrapper.querySelector('.date-display-value') || document.createElement('span');
+        const hadDisplay = wrapper.contains(display);
+        if (!hadDisplay) {
+            display.className = 'date-display-value text-xs md:text-sm font-mono font-medium';
+            wrapper.insertBefore(display, input.nextSibling);
+        }
+        display.classList.add('date-display-export');
         display.textContent = formatDateForDisplay(input.value);
+        // visibility:hidden 而非 display:none：保留 input 在文档流中的占位高度，
+        // 避免 wrapper 塌陷导致 position:absolute 的 display 层变为 0px 高度。
+        input.style.visibility = 'hidden';
+
+        restoreTasks.push(() => {
+            input.style.visibility = '';
+            display.classList.remove('date-display-export');
+            if (!hadDisplay) display.remove();
+        });
+    });
+
+    return () => {
+        restoreTasks.reverse().forEach((restore) => restore());
+    };
+}
+
+/*
+ * html-to-image 序列化时无法可靠保留 -webkit-/-moz-appearance 这类伪元素相关样式，
+ * Firefox 截图里 number input 会重新出现上下调节按钮。导出前用 div 替换，导出后还原。
+ */
+function prepareNumberInputsForExport(node) {
+    const restoreTasks = [];
+    const inputs = node.querySelectorAll('input[type="number"]');
+
+    inputs.forEach((input) => {
+        const display = document.createElement('div');
+        display.className = input.className;
+        const cs = window.getComputedStyle(input);
+        // 保留输入框的对齐方式（部分 number 框是居中显示的）
+        display.style.display = 'flex';
+        display.style.alignItems = 'center';
+        display.style.justifyContent = cs.textAlign === 'center'
+            ? 'center'
+            : (cs.textAlign === 'right' ? 'flex-end' : 'flex-start');
+        display.textContent = input.value || input.placeholder || '';
         input.style.display = 'none';
-        wrapper.insertBefore(display, input);
+        input.parentElement && input.parentElement.insertBefore(display, input);
 
         restoreTasks.push(() => {
             input.style.display = '';
@@ -409,7 +480,11 @@ function showToast(msg) {
 function initDates() {
     const now = new Date();
     els.tradeDate.value = formatDate(now);
-    if (els.dueDate.value) return;
+    syncDateDisplay(els.tradeDate);
+    if (els.dueDate.value) {
+        syncDateDisplay(els.dueDate);
+        return;
+    }
     const currentYear = now.getFullYear();
     const thisYearNov25 = new Date(currentYear, 10, 25); 
     let targetDueDate;
@@ -419,6 +494,7 @@ function initDates() {
         targetDueDate = new Date(currentYear + 1, 10, 25);
     }
     els.dueDate.value = formatDate(targetDueDate);
+    syncDateDisplay(els.dueDate);
 }
 
 function formatDate(date) {
@@ -602,6 +678,7 @@ async function generateImage() {
         const isDark = document.documentElement.classList.contains('dark');
         node.classList.add('exporting');
         const restoreDateInputs = prepareDateInputsForExport(node);
+        const restoreNumberInputs = prepareNumberInputsForExport(node);
         const restoreSelectInputs = prepareSelectInputsForExport(node);
 
         try {
@@ -630,6 +707,7 @@ async function generateImage() {
             showToast('生成出错');
         } finally {
             restoreSelectInputs();
+            restoreNumberInputs();
             restoreDateInputs();
             node.classList.remove('exporting');
         }

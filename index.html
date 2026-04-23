@@ -35,7 +35,7 @@
                 <form id="calcForm" class="space-y-3 md:space-y-6">
                     
                     <div class="flex flex-row gap-3 md:gap-6">
-                        <div class="w-[55%] group">
+                        <div class="w-[50%] group">
                             <div class="flex justify-between items-end mb-1 md:mb-2 h-4">
                                 <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <div class="w-[45%] group">
+                        <div class="w-[50%] group">
                             <div class="flex justify-between items-end mb-1 md:mb-2 h-4">
                                 <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="flex flex-row gap-3 md:gap-6">
-                        <div class="w-1/2 group">
+                        <div class="w-1/2 min-w-0 group">
                             <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 group-focus-within:text-amber-500 transition-colors">
                                 <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <rect x="4" y="5" width="16" height="15" rx="2.5" fill="#fbbf24"/>
@@ -127,6 +127,7 @@
                             </label>
                             <div class="relative date-input-wrapper">
                                 <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-display-value text-xs md:text-sm font-mono font-medium" aria-hidden="true"></span>
                                 <span class="date-input-ff-mask" aria-hidden="true"></span>
                                 <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
                                     <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +136,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="w-1/2 group">
+                        <div class="w-1/2 min-w-0 group">
                             <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 group-focus-within:text-amber-500 transition-colors">
                                 <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9-9-9z" fill="#22c55e"/>
@@ -145,6 +146,7 @@
                             </label>
                             <div class="relative date-input-wrapper">
                                 <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-display-value text-xs md:text-sm font-mono font-medium" aria-hidden="true"></span>
                                 <span class="date-input-ff-mask" aria-hidden="true"></span>
                                 <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
                                     <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
