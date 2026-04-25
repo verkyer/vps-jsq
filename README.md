@@ -2,8 +2,6 @@
 
 ![demo](./demo.png)
 
-HTML 版本，移步 [vps-jsq-html](https://github.com/verkyer/vps-jsq-html)
-
 ✨ **特性**：
 - 💰 支持多币种自动汇率转换 (USD, EUR, GBP, JPY 等)
 - 📅 自动计算剩余天数和金额
@@ -57,5 +55,4 @@ npx wrangler deploy
 ---
 
 ## 📝 许可证
-
-MIT License
+Apache-2.0 License
