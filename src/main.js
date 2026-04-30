@@ -10,7 +10,11 @@ const API_URL = 'https://open.er-api.com/v6/latest/CNY';
 const RATE_CACHE_HOURS = 12;
 // 用户手动刷新汇率次数上限（每 RATE_CACHE_HOURS 内）。防止误触刷爆免费 API 配额。
 const MANUAL_REFRESH_LIMIT = 2;
+const EXPORT_BORDER_RADIUS = 12;
+const SHARE_IMAGE_MIME_TYPE = 'image/webp';
+const SHARE_IMAGE_QUALITY = 0.99;
 let htmlToImageModulePromise = null;
+let generatedImageUrl = '';
 
 const currencySymbols = {
     'USD': '$', 'EUR': '\u20AC', 'GBP': '\u00A3', 'JPY': '\u00A5',
@@ -224,6 +228,55 @@ async function getHtmlToImage() {
     }
 
     return htmlToImageModulePromise;
+}
+
+function canvasToBlob(canvas, type, quality) {
+    return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+            if (blob) {
+                resolve(blob);
+            } else {
+                reject(new Error(`Canvas export failed: ${type}`));
+            }
+        }, type, quality);
+    });
+}
+
+function buildRoundedRectPath(ctx, width, height, radius) {
+    const safeRadius = Math.max(0, Math.min(radius, width / 2, height / 2));
+    ctx.beginPath();
+    ctx.moveTo(safeRadius, 0);
+    ctx.lineTo(width - safeRadius, 0);
+    ctx.quadraticCurveTo(width, 0, width, safeRadius);
+    ctx.lineTo(width, height - safeRadius);
+    ctx.quadraticCurveTo(width, height, width - safeRadius, height);
+    ctx.lineTo(safeRadius, height);
+    ctx.quadraticCurveTo(0, height, 0, height - safeRadius);
+    ctx.lineTo(0, safeRadius);
+    ctx.quadraticCurveTo(0, 0, safeRadius, 0);
+    ctx.closePath();
+}
+
+function clipCanvasToRoundedRect(sourceCanvas, radiusPx) {
+    const outputCanvas = document.createElement('canvas');
+    outputCanvas.width = sourceCanvas.width;
+    outputCanvas.height = sourceCanvas.height;
+
+    const ctx = outputCanvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    buildRoundedRectPath(ctx, outputCanvas.width, outputCanvas.height, radiusPx);
+    ctx.clip();
+    ctx.drawImage(sourceCanvas, 0, 0);
+
+    return outputCanvas;
+}
+
+function resetGeneratedImage() {
+    if (generatedImageUrl) {
+        URL.revokeObjectURL(generatedImageUrl);
+    }
+    generatedImageUrl = '';
 }
 
 function formatDateForDisplay(value) {
@@ -663,6 +716,7 @@ function closeImageModal() {
         modal.actions.classList.add('hidden');
         modal.loading.classList.remove('hidden');
         modal.img.src = '';
+        resetGeneratedImage();
     }, 300);
 }
 
@@ -684,7 +738,6 @@ async function generateImage() {
     setTimeout(async () => {
         const node = document.getElementById('captureRoot');
         const mainCard = document.getElementById('mainCard');
-        const isDark = document.documentElement.classList.contains('dark');
         node.classList.add('exporting');
         mainCard.classList.add('exporting');
         const restoreDateInputs = prepareDateInputsForExport(mainCard);
@@ -694,10 +747,11 @@ async function generateImage() {
         try {
             const htmlToImage = await getHtmlToImage();
             const rect = node.getBoundingClientRect();
-            let dataUrl = await htmlToImage.toSvg(node, {
-                quality: 0.95,
+            const pixelRatio = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+            const canvas = await htmlToImage.toCanvas(node, {
                 width: Math.ceil(rect.width),
                 height: Math.ceil(rect.height),
+                pixelRatio,
                 filter: (element) => {
                     if (!element || !element.id) return true;
                     return !['themeToggle', 'btnContainer', 'footerWrap'].includes(element.id);
@@ -706,45 +760,14 @@ async function generateImage() {
                     transform: 'scale(1)',
                 }
             });
-
-            // 注入原生 SVG clipPath，确保4个角在所有渲染器中均显示圆角
-            try {
-                const svgStr = decodeURIComponent(dataUrl.split(',')[1]);
-                const parser = new DOMParser();
-                const svgDoc = parser.parseFromString(svgStr, 'image/svg+xml');
-                const svgEl = svgDoc.documentElement;
-                const w = svgEl.getAttribute('width');
-                const h = svgEl.getAttribute('height');
-                const r = 12;
-
-                const defs = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'defs');
-                const clipPath = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-                clipPath.setAttribute('id', 'rounded-bg');
-                const clipRect = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                clipRect.setAttribute('width', w);
-                clipRect.setAttribute('height', h);
-                clipRect.setAttribute('rx', r);
-                clipRect.setAttribute('ry', r);
-                clipPath.appendChild(clipRect);
-                defs.appendChild(clipPath);
-                svgEl.insertBefore(defs, svgEl.firstChild);
-
-                const g = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.setAttribute('clip-path', 'url(#rounded-bg)');
-                while (svgEl.childNodes.length > 1) {
-                    g.appendChild(svgEl.childNodes[1]);
-                }
-                svgEl.appendChild(g);
-
-                const serialized = new XMLSerializer().serializeToString(svgDoc);
-                dataUrl = 'data:image/svg+xml,' + encodeURIComponent(serialized);
-            } catch (postErr) {
-                console.warn('SVG post-process failed, using original:', postErr);
-            }
+            const roundedCanvas = clipCanvasToRoundedRect(canvas, EXPORT_BORDER_RADIUS * pixelRatio);
+            const blob = await canvasToBlob(roundedCanvas, SHARE_IMAGE_MIME_TYPE, SHARE_IMAGE_QUALITY);
+            resetGeneratedImage();
+            generatedImageUrl = URL.createObjectURL(blob);
 
             console.log('Image generated successfully');
             modal.loading.classList.add('hidden');
-            modal.img.src = dataUrl;
+            modal.img.src = generatedImageUrl;
             modal.img.classList.remove('hidden');
             modal.actions.classList.remove('hidden');
         } catch (e) {
