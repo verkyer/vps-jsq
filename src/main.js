@@ -676,27 +676,65 @@ async function generateImage() {
     
     // Use setTimeout to allow UI to update before heavy lifting
     setTimeout(async () => {
-        const node = document.getElementById('mainCard');
+        const node = document.getElementById('captureRoot');
+        const mainCard = document.getElementById('mainCard');
         const isDark = document.documentElement.classList.contains('dark');
         node.classList.add('exporting');
-        const restoreDateInputs = prepareDateInputsForExport(node);
-        const restoreNumberInputs = prepareNumberInputsForExport(node);
-        const restoreSelectInputs = prepareSelectInputsForExport(node);
+        mainCard.classList.add('exporting');
+        const restoreDateInputs = prepareDateInputsForExport(mainCard);
+        const restoreNumberInputs = prepareNumberInputsForExport(mainCard);
+        const restoreSelectInputs = prepareSelectInputsForExport(mainCard);
 
         try {
             const htmlToImage = await getHtmlToImage();
-            const dataUrl = await htmlToImage.toPng(node, {
+            const rect = node.getBoundingClientRect();
+            let dataUrl = await htmlToImage.toSvg(node, {
                 quality: 0.95,
-                pixelRatio: 2,
-                backgroundColor: isDark ? '#000000' : '#f0f2f5',
+                width: Math.ceil(rect.width),
+                height: Math.ceil(rect.height),
                 filter: (element) => {
                     if (!element || !element.id) return true;
-                    return element.id !== 'btnContainer';
+                    return !['themeToggle', 'btnContainer', 'footerWrap'].includes(element.id);
                 },
                 style: {
                     transform: 'scale(1)',
                 }
             });
+
+            // 注入原生 SVG clipPath，确保4个角在所有渲染器中均显示圆角
+            try {
+                const svgStr = decodeURIComponent(dataUrl.split(',')[1]);
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgStr, 'image/svg+xml');
+                const svgEl = svgDoc.documentElement;
+                const w = svgEl.getAttribute('width');
+                const h = svgEl.getAttribute('height');
+                const r = 12;
+
+                const defs = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                const clipPath = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+                clipPath.setAttribute('id', 'rounded-bg');
+                const clipRect = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                clipRect.setAttribute('width', w);
+                clipRect.setAttribute('height', h);
+                clipRect.setAttribute('rx', r);
+                clipRect.setAttribute('ry', r);
+                clipPath.appendChild(clipRect);
+                defs.appendChild(clipPath);
+                svgEl.insertBefore(defs, svgEl.firstChild);
+
+                const g = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('clip-path', 'url(#rounded-bg)');
+                while (svgEl.childNodes.length > 1) {
+                    g.appendChild(svgEl.childNodes[1]);
+                }
+                svgEl.appendChild(g);
+
+                const serialized = new XMLSerializer().serializeToString(svgDoc);
+                dataUrl = 'data:image/svg+xml,' + encodeURIComponent(serialized);
+            } catch (postErr) {
+                console.warn('SVG post-process failed, using original:', postErr);
+            }
 
             console.log('Image generated successfully');
             modal.loading.classList.add('hidden');
@@ -711,6 +749,7 @@ async function generateImage() {
             restoreSelectInputs();
             restoreNumberInputs();
             restoreDateInputs();
+            mainCard.classList.remove('exporting');
             node.classList.remove('exporting');
         }
     }, 100);

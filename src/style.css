@@ -45,6 +45,10 @@ html:not(.dark) body {
         0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
+html:not(.dark) #mainCard {
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
 .metal-card-top-line::after {
     content: '';
     position: absolute;
@@ -276,8 +280,144 @@ html.dark .date-native-input {
 }
 
 /* 生成图片时隐藏右侧顶部多余间距（仅 mobile） */
+#captureRoot.exporting {
+    box-sizing: content-box;
+    padding: 16px 12px 12px;
+    background-color: #f0f2f5;
+    background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.8px);
+    background-size: 20px 20px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+html.dark #captureRoot.exporting {
+    background-color: #17171c;
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.12) 0.7px, transparent 0.8px),
+        linear-gradient(to bottom, #1e1e24, #17171c);
+    background-size: 20px 20px, 100% 100%;
+}
+@media (min-width: 768px) {
+    #captureRoot.exporting {
+        padding: 30px 24px 24px;
+    }
+}
 #mainCard.exporting #resultCard {
     padding-top: 12px;
+}
+#mainCard.exporting #btnContainer,
+#captureRoot.exporting #footerWrap {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    #resultCard .days-progress-row .progress-container {
+        transform: translateY(4px);
+    }
+}
+
+@media (max-width: 767px) {
+    #resultCard .result-summary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+    }
+
+    #mainCard.exporting #resultCard {
+        padding-bottom: 16px;
+    }
+
+    #resultCard .result-days-panel {
+        grid-column: 1;
+        grid-row: 1;
+        display: grid;
+        grid-template-rows: 16px 42px 14px;
+        row-gap: 4px;
+        margin-bottom: 0;
+        min-width: 0;
+    }
+
+    #resultCard .result-divider {
+        grid-column: 2;
+        grid-row: 1;
+        width: 1px;
+        height: 90%;
+        min-height: 67px;
+        margin: 0;
+        align-self: center;
+        transform: translateX(-12px);
+        background-color: #e2e8f0;
+    }
+
+    html.dark #resultCard .result-divider {
+        background-color: #3f3f46;
+    }
+
+    #resultCard .result-value-panel {
+        grid-column: 3;
+        grid-row: 1;
+        display: grid;
+        grid-template-rows: 16px 42px 14px;
+        row-gap: 4px;
+        margin-bottom: 0;
+        min-width: 0;
+    }
+
+    #resultCard .result-days-panel > .flex:first-child {
+        justify-content: flex-start;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 0;
+        min-height: 16px;
+    }
+
+    #resultCard #progressText {
+        min-height: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    #resultCard .result-value-panel h2 {
+        min-height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 0;
+    }
+
+    #resultCard .result-amount-row {
+        align-items: flex-end;
+        align-self: center;
+    }
+
+    #resultCard #originalCurrencyValue {
+        align-self: center;
+        margin-top: 0;
+    }
+
+    #resultCard .days-progress-row {
+        display: contents;
+    }
+
+    #resultCard .days-count-line {
+        align-self: center;
+        font-size: 1.6rem;
+        line-height: 1;
+    }
+
+    #resultCard .days-count-line span:last-child {
+        font-size: 0.38em;
+        margin-left: 0.25rem;
+    }
+
+    #resultCard .days-progress-row .progress-container {
+        align-self: center;
+        width: 85%;
+        min-width: 87px;
+        max-width: 157px;
+        height: 0.375rem;
+        flex: none;
+    }
 }
 
 /* Spin Animation */
