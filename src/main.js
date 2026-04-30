@@ -12,7 +12,8 @@ const RATE_CACHE_HOURS = 12;
 const MANUAL_REFRESH_LIMIT = 2;
 const EXPORT_BORDER_RADIUS = 12;
 const SHARE_IMAGE_MIME_TYPE = 'image/webp';
-const SHARE_IMAGE_QUALITY = 0.99;
+const SHARE_IMAGE_QUALITY = 0.98;
+const SHARE_IMAGE_PIXEL_RATIO = 2;
 let htmlToImageModulePromise = null;
 let generatedImageUrl = '';
 
@@ -609,26 +610,25 @@ function calculate() {
         valCNY = valOrig * rate;
     }
 
-    // 进度条语义：当前续费周期内的「剩余比例」
-    // 当剩余天数 > 一个周期：满格 100%（已续多个周期），文字额外标注 "+N 周期"
+    // 进度条语义：当前续费周期内的「剩余比例」，文案显示按总剩余天数 / 周期取整。
     let progressPct;
-    let extraCycles = 0;
+    let displayProgressPct;
     if (diffDays <= 0) {
         progressPct = 0;
+        displayProgressPct = 0;
     } else if (diffDays >= cycleDays) {
         progressPct = 100;
-        extraCycles = Math.floor(diffDays / cycleDays);
+        displayProgressPct = Math.round((diffDays / cycleDays) * 100);
     } else {
-        progressPct = (diffDays / cycleDays) * 100;
+        displayProgressPct = Math.max(1, Math.round((diffDays / cycleDays) * 100));
+        progressPct = displayProgressPct;
     }
 
     els.progressBar.style.width = `${progressPct}%`;
     setFinalValueDisplay(valCNY.toFixed(2));
     els.originalCurrencyValue.textContent = `≈ ${valOrig.toFixed(2)} ${els.currency.value}`;
     els.daysRemaining.textContent = diffDays > 0 ? diffDays : '0';
-    els.progressText.textContent = extraCycles > 0
-        ? `100% (+${extraCycles}周期)`
-        : `${progressPct.toFixed(1)}%`;
+    els.progressText.textContent = `${displayProgressPct}%`;
 }
 
 function setFinalValueDisplay(value) {
@@ -747,7 +747,7 @@ async function generateImage() {
         try {
             const htmlToImage = await getHtmlToImage();
             const rect = node.getBoundingClientRect();
-            const pixelRatio = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+            const pixelRatio = SHARE_IMAGE_PIXEL_RATIO;
             const canvas = await htmlToImage.toCanvas(node, {
                 width: Math.ceil(rect.width),
                 height: Math.ceil(rect.height),

@@ -132,14 +132,19 @@ html:not(.dark) #mainCard {
 
 /* Cycle Radio Button Styling */
 .cycle-radio:checked + div {
-    background-color: #f59e0b;
-    color: #000;
+    background-color: #fff;
+    color: #f59e0b;
     font-weight: 700;
     border-color: #f59e0b;
+    border-width: 1px;
+    box-shadow: inset 0 0 0 1px #f59e0b;
 }
 
-.cycle-radio:checked + div:hover {
-    color: #fff;
+html.dark .cycle-radio:checked + div {
+    background-color: #3f3f46;
+    color: #a1a1aa;
+    border-color: #71717a;
+    box-shadow: inset 0 0 0 1px #71717a;
 }
 
 /* Value Glow Effect */
@@ -426,11 +431,11 @@ html.dark #captureRoot.exporting {
         grid-column: 2;
         grid-row: 1;
         width: 1px;
-        height: calc(100% - 24px);
-        min-height: 44px;
-        margin: 0 0 4px;
-        align-self: end;
-        transform: translateX(-16px);
+        height: 95%;
+        min-height: 72px;
+        margin: 0;
+        align-self: center;
+        justify-self: center;
         background-color: #e2e8f0;
     }
 
@@ -460,6 +465,7 @@ html.dark #captureRoot.exporting {
         min-height: 16px;
         display: flex;
         align-items: center;
+        transform: translateX(4px);
     }
 
     #resultCard .result-value-panel h2 {
@@ -493,7 +499,7 @@ html.dark #captureRoot.exporting {
     }
 
     #resultCard #originalCurrencyValue {
-        align-self: center;
+        align-self: end;
         margin-top: 0;
     }
 
@@ -513,7 +519,7 @@ html.dark #captureRoot.exporting {
     }
 
     #resultCard .days-progress-row .progress-container {
-        align-self: center;
+        align-self: end;
         width: calc(85% - 6px);
         min-width: 81px;
         max-width: 151px;
