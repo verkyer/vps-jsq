@@ -247,7 +247,7 @@ function prepareDateInputsForExport(node) {
         const display = wrapper.querySelector('.date-display-value') || document.createElement('span');
         const hadDisplay = wrapper.contains(display);
         if (!hadDisplay) {
-            display.className = 'date-display-value text-xs md:text-sm font-mono font-medium';
+            display.className = 'date-display-value text-xs md:text-sm font-medium tabular-nums';
             wrapper.insertBefore(display, input.nextSibling);
         }
         display.classList.add('date-display-export');
@@ -537,7 +537,7 @@ function calculate() {
 
     // 空 / 非法日期：清空结果区，给出占位提示
     if (isNaN(due.getTime()) || isNaN(trade.getTime())) {
-        els.finalValue.textContent = '0.00';
+        setFinalValueDisplay('0.00');
         els.originalCurrencyValue.textContent = '请填写到期日 / 交易日';
         els.daysRemaining.textContent = '--';
         els.progressBar.style.width = '0%';
@@ -570,12 +570,18 @@ function calculate() {
     }
 
     els.progressBar.style.width = `${progressPct}%`;
-    els.finalValue.textContent = valCNY.toFixed(2);
+    setFinalValueDisplay(valCNY.toFixed(2));
     els.originalCurrencyValue.textContent = `≈ ${valOrig.toFixed(2)} ${els.currency.value}`;
     els.daysRemaining.textContent = diffDays > 0 ? diffDays : '0';
     els.progressText.textContent = extraCycles > 0
         ? `100% (+${extraCycles}周期)`
         : `${progressPct.toFixed(1)}%`;
+}
+
+function setFinalValueDisplay(value) {
+    els.finalValue.textContent = value;
+    const numericLength = value.replace(/[^0-9]/g, '').length;
+    els.finalValue.classList.toggle('final-value-long', numericLength >= 7);
 }
 
 function copyResult() {

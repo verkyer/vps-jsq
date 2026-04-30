@@ -38,20 +38,17 @@
                         <div class="w-[50%] group">
                             <div class="flex justify-between items-end mb-1 md:mb-2 h-4">
                                 <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <rect x="3" y="6" width="18" height="12" rx="2.5" fill="#fbbf24"/>
-                                        <path d="M3 10.5h18" stroke="#92400e" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
-                                        <rect x="5.5" y="8.3" width="6.2" height="2.4" rx="1.2" fill="#fde68a"/>
-                                        <path d="M7.5 15h4M14 15h2.5M16.5 12.8h2" stroke="#92400e" stroke-width="1.3" stroke-linecap="round"/>
+                                    <svg class="field-icon icon-renewal w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path d="M17.9,2.6c-1-1.1-2.7-1.6-5-1.6H6.3C5.8,1,5.4,1.3,5.4,1.8L2.6,19c-0.1,0.3,0.2,0.7,0.6,0.7h4.1l1-6.3l0,0c0.1-0.5,0.5-0.8,0.9-0.8h1.9c3.8,0,6.7-1.5,7.6-6c0-0.1,0.1-0.3,0.1-0.4C19,4.7,18.8,3.6,17.9,2.6 M19.7,7.2L19.7,7.2c0,0.1-0.1,0.2-0.1,0.4c-0.9,4.4-3.8,6-7.6,6h-1.9c-0.5,0-0.8,0.3-0.9,0.8l-1,6.3l-0.3,1.8c0,0.3,0.2,0.6,0.5,0.6h3.4c0.4,0,0.7-0.3,0.8-0.7v-0.2l0.6-4.1v-0.2c0.1-0.4,0.4-0.7,0.8-0.7h0.6c3.3,0,5.9-1.3,6.7-5.2c0.3-1.6,0.2-3-0.7-3.9C20.3,7.7,20,7.4,19.7,7.2"/>
                                     </svg>
                                     续费金额
                                 </label>
                                 <span id="priceCNYPreview" class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase leading-none transition-colors whitespace-nowrap mr-1 md:mr-1.5">≈0.00元</span>
                             </div>
                             <div class="relative">
-                                <span class="symbol-display absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 font-mono text-base md:text-lg z-10 pointer-events-none transition-colors">$</span>
+                                <span class="symbol-display absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 font-medium tabular-nums text-base md:text-lg z-10 pointer-events-none transition-colors">$</span>
                                 <input type="number" id="price" step="1" 
-                                    class="w-full h-10 md:h-12 pl-8 md:pl-10 pr-2 md:pr-4 rounded text-base md:text-xl font-mono font-medium tracking-wide transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500 dark:focus:ring-0" 
+                                    class="w-full h-10 md:h-12 pl-8 md:pl-10 pr-2 md:pr-4 rounded text-base md:text-xl font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500 dark:focus:ring-0" 
                                     placeholder="0.00">
                             </div>
                         </div>
@@ -59,10 +56,8 @@
                         <div class="w-[50%] group">
                             <div class="flex justify-between items-end mb-1 md:mb-2 h-4">
                                 <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold group-focus-within:text-amber-500 leading-none transition-colors flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <circle cx="12" cy="12" r="9" fill="#fbbf24"/>
-                                        <circle cx="12" cy="12" r="6.5" fill="none" stroke="#92400e" stroke-width="0.7" opacity=".4"/>
-                                        <path d="M9 8.5l3 4 3-4M9 12.5h6M10 14.5h4M12 14.5v2.5" stroke="#92400e" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <svg class="field-icon icon-currency w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 12C1.5 6.20101 6.20101 1.5 12 1.5C17.799 1.5 22.5 6.20101 22.5 12C22.5 17.799 17.799 22.5 12 22.5C6.20101 22.5 1.5 17.799 1.5 12ZM9.75 9.75C9.75 9.39934 9.93156 9.04321 10.3279 8.74936C10.7277 8.45299 11.3164 8.25 12 8.25C12.6836 8.25 13.2723 8.45299 13.6721 8.74936C14.0684 9.04321 14.25 9.39934 14.25 9.75C14.25 10.1642 14.5858 10.5 15 10.5C15.4142 10.5 15.75 10.1642 15.75 9.75C15.75 8.82566 15.2566 8.05679 14.5654 7.54439C14.059 7.16898 13.4315 6.91574 12.75 6.80828V6C12.75 5.58579 12.4142 5.25 12 5.25C11.5858 5.25 11.25 5.58579 11.25 6V6.80828C10.5685 6.91574 9.94095 7.16898 9.43458 7.54439C8.74344 8.05679 8.25 8.82566 8.25 9.75C8.25 10.6743 8.74344 11.4432 9.43458 11.9556C10.1223 12.4655 11.0336 12.75 12 12.75C12.6836 12.75 13.2723 12.953 13.6721 13.2494C14.0684 13.5432 14.25 13.8993 14.25 14.25C14.25 14.6007 14.0684 14.9568 13.6721 15.2506C13.2723 15.547 12.6836 15.75 12 15.75C11.3164 15.75 10.7277 15.547 10.3279 15.2506C9.93156 14.9568 9.75 14.6007 9.75 14.25C9.75 13.8358 9.41421 13.5 9 13.5C8.58579 13.5 8.25 13.8358 8.25 14.25C8.25 15.1743 8.74344 15.9432 9.43458 16.4556C9.94095 16.831 10.5685 17.0843 11.25 17.1917V18C11.25 18.4142 11.5858 18.75 12 18.75C12.4142 18.75 12.75 18.4142 12.75 18V17.1917C13.4315 17.0843 14.059 16.831 14.5654 16.4556C15.2566 15.9432 15.75 15.1743 15.75 14.25C15.75 13.3257 15.2566 12.5568 14.5654 12.0444C13.8777 11.5345 12.9664 11.25 12 11.25C11.3164 11.25 10.7277 11.047 10.3279 10.7506C9.93156 10.4568 9.75 10.1007 9.75 9.75Z"/>
                                     </svg>
                                     币种
                                 </label>
@@ -92,14 +87,8 @@
 
                     <div>
                         <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 transition-colors">
-                            <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <rect x="3" y="5" width="18" height="16" rx="2" fill="#3b82f6"/>
-                                <rect x="3" y="5" width="18" height="5" fill="#ef4444"/>
-                                <rect x="6.5" y="3" width="2" height="4" rx="0.6" fill="#fbbf24"/>
-                                <rect x="15.5" y="3" width="2" height="4" rx="0.6" fill="#fbbf24"/>
-                                <rect x="6" y="13" width="3" height="2" rx="0.4" fill="white" opacity=".9"/>
-                                <rect x="10.5" y="13" width="3" height="2" rx="0.4" fill="white" opacity=".7"/>
-                                <rect x="15" y="13" width="3" height="2" rx="0.4" fill="white" opacity=".7"/>
+                            <svg class="field-icon icon-cycle w-3.5 h-3.5 shrink-0" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+                                <path d="M32,0C14.328,0,0,14.328,0,32s14.328,32,32,32s32-14.328,32-32S49.672,0,32,0z M42.844,42.844c-1.566,1.566-4.168,1.488-5.734-0.078l-7.934-7.934c-0.371-0.367-0.664-0.812-0.867-1.305C28.105,33.039,28,32.523,28,32V16c0-2.211,1.789-4,4-4s4,1.789,4,4v14.344l6.859,6.859C44.426,38.77,44.406,41.281,42.844,42.844z"/>
                             </svg>
                             付款周期
                         </label>
@@ -116,18 +105,14 @@
                     <div class="flex flex-row gap-3 md:gap-6">
                         <div class="w-1/2 min-w-0 group">
                             <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 group-focus-within:text-amber-500 transition-colors">
-                                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <rect x="4" y="5" width="16" height="15" rx="2.5" fill="#fbbf24"/>
-                                    <path d="M4 9.5h16" stroke="#92400e" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
-                                    <path d="M8 3.5v3M16 3.5v3" stroke="#92400e" stroke-width="1.4" stroke-linecap="round"/>
-                                    <circle cx="12" cy="14" r="3.2" fill="#fff7ed"/>
-                                    <path d="M12 12.4v1.8l1.3.9" stroke="#92400e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg class="field-icon icon-due-date w-3.5 h-3.5 shrink-0" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+                                    <path d="M60,4H48c0-2.211-1.789-4-4-4s-4,1.789-4,4H24c0-2.211-1.789-4-4-4s-4,1.789-4,4H4C1.789,4,0,5.789,0,8v52c0,2.211,1.789,4,4,4h56c2.211,0,4-1.789,4-4V8C64,5.789,62.211,4,60,4z M8,12h8c0,2.211,1.789,4,4,4s4-1.789,4-4h16c0,2.211,1.789,4,4,4s4-1.789,4-4h8v8H8V12z"/>
                                 </svg>
                                 到期日期
                             </label>
                             <div class="relative date-input-wrapper">
-                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
-                                <span class="date-display-value text-xs md:text-sm font-mono font-medium" aria-hidden="true"></span>
+                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-display-value text-xs md:text-sm font-medium tabular-nums" aria-hidden="true"></span>
                                 <span class="date-input-ff-mask" aria-hidden="true"></span>
                                 <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
                                     <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,15 +123,14 @@
                         </div>
                         <div class="w-1/2 min-w-0 group">
                             <label class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 uppercase font-bold mb-1 md:mb-2 flex items-center gap-1 group-focus-within:text-amber-500 transition-colors">
-                                <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9-9-9z" fill="#22c55e"/>
-                                    <circle cx="8" cy="8" r="1.7" fill="white"/>
+                                <svg class="field-icon icon-trade-date w-3.5 h-3.5 shrink-0" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+                                    <path d="M62.828,29.172l-28-28C34.078,0.422,33.062,0,32,0H4C1.789,0,0,1.789,0,4v28c0,1.062,0.422,2.078,1.172,2.828l28,28C29.953,63.609,30.977,64,32,64s2.047-0.391,2.828-1.172l28-28C64.391,33.266,64.391,30.734,62.828,29.172z M20,28.004c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S24.418,28.004,20,28.004z"/>
                                 </svg>
                                 交易日期
                             </label>
                             <div class="relative date-input-wrapper">
-                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-mono font-medium transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
-                                <span class="date-display-value text-xs md:text-sm font-mono font-medium" aria-hidden="true"></span>
+                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-10 md:pr-12 rounded text-xs md:text-sm font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <span class="date-display-value text-xs md:text-sm font-medium tabular-nums" aria-hidden="true"></span>
                                 <span class="date-input-ff-mask" aria-hidden="true"></span>
                                 <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
                                     <svg class="h-[15px] w-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +150,7 @@
                                 </svg>
                                 CNY 汇率
                             </span>
-                            <input type="number" id="customRate" step="0.0001" class="w-16 md:w-24 text-sm md:text-base font-mono font-bold text-center border-b outline-none py-1 transition-colors bg-transparent border-slate-400 text-amber-600 focus:border-amber-500 dark:border-zinc-600 dark:text-amber-500 dark:focus:border-amber-500" placeholder="0.00">
+                            <input type="number" id="customRate" step="0.0001" class="w-16 md:w-24 text-sm md:text-base font-bold tabular-nums text-center border-b outline-none py-1 transition-colors bg-transparent border-slate-400 text-amber-600 focus:border-amber-500 dark:border-zinc-600 dark:text-amber-500 dark:focus:border-amber-500" placeholder="0.00">
                         </div>
                         
                         <div class="flex items-center gap-2 md:gap-3 relative">
@@ -190,21 +174,26 @@
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-100/50 dark:from-zinc-800/20 via-transparent to-transparent opacity-50 pointer-events-none transition-colors"></div>
 
                 <!-- 增加 px-1 (4px) 左右间隙 -->
-                <div class="result-summary relative z-10 w-full flex-1 flex flex-col justify-start md:justify-center px-1">
-                    <div class="result-value-panel text-right mb-1">
-                        <h2 class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 uppercase tracking-widest font-bold mb-1 transition-colors">剩余价值 (RMB)</h2>
-                        <div class="result-amount-row flex items-baseline justify-end gap-1">
+                <div class="result-summary relative z-10 w-full min-w-0 flex-1 flex flex-col justify-start md:justify-center px-0.5 md:px-1">
+                    <div class="result-value-panel text-right mb-1 min-w-0">
+                        <h2 class="text-[10px] md:text-xs text-slate-500/90 dark:text-zinc-500 uppercase tracking-normal font-bold mb-1 transition-colors flex items-center justify-end gap-1">
+                            <svg class="field-icon icon-value w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm10 10v-1h3v-2h-2.586l2.122-2.121-1.415-1.415L12 8.586 9.879 6.464 8.464 7.88 10.586 10H8v2h3v1H8v2h3v2h2v-2h3v-2h-3z"/>
+                            </svg>
+                            剩余价值 (RMB)
+                        </h2>
+                        <div class="result-amount-row flex min-w-0 items-baseline justify-end gap-0.5 md:gap-1">
                             <span class="text-2xl md:text-3xl text-slate-500 dark:text-zinc-600 font-light transition-colors">¥</span>
-                            <span id="finalValue" class="text-4xl md:text-6xl lg:text-7xl font-mono font-bold value-glow tracking-tighter leading-none transition-colors whitespace-nowrap">0.00</span>
+                            <span id="finalValue" class="max-w-full text-[clamp(2rem,calc(8.6vw+4px),2.5rem)] md:text-[68px] font-bold tabular-nums value-glow tracking-normal leading-none transition-colors whitespace-nowrap">0.00</span>
                         </div>
-                        <div id="originalCurrencyValue" class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase leading-none mt-1 transition-colors whitespace-nowrap">≈0.00 USD</div>
+                        <div id="originalCurrencyValue" class="text-[10px] md:text-xs text-slate-500/90 dark:text-zinc-500 font-bold uppercase leading-none mt-1 transition-colors whitespace-nowrap">≈0.00 USD</div>
                     </div>
 
                     <div class="result-divider w-full h-px bg-slate-200 dark:bg-zinc-800 my-2 md:my-4 transition-colors"></div>
 
                     <div class="result-days-panel mb-2">
                         <div class="flex items-center justify-between mb-1 md:mb-2">
-                            <div class="text-[10px] md:text-xs text-slate-500 dark:text-zinc-500 font-bold uppercase transition-colors flex items-center gap-1">
+                            <div class="text-[10px] md:text-xs text-slate-500/90 dark:text-zinc-500 font-bold uppercase transition-colors flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <path d="M7 3h10v1.5c0 2.5-2 4-5 5.5-3-1.5-5-3-5-5.5V3z" fill="#f59e0b"/>
                                     <path d="M7 21h10v-1.5c0-2.5-2-4-5-5.5-3 1.5-5 3-5 5.5V21z" fill="#3b82f6"/>
@@ -218,8 +207,8 @@
                         </div>
                         
                         <div class="days-progress-row flex items-center gap-3">
-                            <div class="days-count-line whitespace-nowrap text-xl md:text-2xl font-mono text-slate-700 dark:text-zinc-200 leading-none transition-colors">
-                                <span id="daysRemaining" class="opacity-75">0</span><span class="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase leading-none transition-colors whitespace-nowrap ml-1">DAYS</span>
+                            <div class="days-count-line whitespace-nowrap text-2xl md:text-2xl font-semibold tabular-nums text-slate-500/90 dark:text-zinc-400 leading-none transition-colors">
+                                <span id="daysRemaining" class="opacity-75">0</span><span class="text-[10px] md:text-xs text-slate-400/90 dark:text-zinc-500 font-bold uppercase leading-none transition-colors whitespace-nowrap ml-1">DAYS</span>
                             </div>
                             <div class="flex-1 progress-container h-2 md:h-1.5 rounded-full overflow-hidden transition-colors bg-slate-200 dark:bg-zinc-800">
                                 <div id="progressBar" class="progress-fill h-full w-0 transition-all duration-700 ease-out rounded-full"></div>
@@ -246,7 +235,7 @@
         </div>
 
         <div id="footerWrap" class="mt-2 text-center">
-            <span class="text-[10px] md:text-sm text-slate-400 dark:text-zinc-600 font-mono transition-colors">Ver 1.3.0 // By <a href="https://www.xiaoge.org/" target="_blank" class="hover:text-amber-500 transition-colors">XiaoGe</a>. <a href="https://github.com/verkyer/vps-jsq" target="_blank" class="hover:text-amber-500 transition-colors">vps-jsq</a></span>
+            <span class="text-[10px] md:text-[13px] text-slate-400 dark:text-zinc-600 font-medium tabular-nums transition-colors">Ver 1.3.1 // By <a href="https://www.xiaoge.org/" target="_blank" class="hover:text-amber-500 transition-colors">XiaoGe</a>. <a href="https://github.com/verkyer/vps-jsq" target="_blank" class="hover:text-amber-500 transition-colors">VPS-JSQ</a></span>
         </div>
 
     </main>
@@ -261,13 +250,13 @@
             <div id="modalLoading" class="text-white flex flex-col items-center gap-3">
                 <!-- Spinner Icon -->
                 <svg class="animate-spin h-8 w-8 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                <span class="text-sm font-mono">生成中...</span>
+                <span class="text-sm font-medium">生成中...</span>
             </div>
 
             <img id="generatedImage" class="w-full h-auto rounded-xl shadow-2xl hidden" alt="Result Preview">
             
             <div id="modalActions" class="mt-6 flex gap-4 hidden">
-                <p class="text-white/60 text-xs md:text-sm font-mono mt-2 flex items-center">
+                <p class="text-white/60 text-xs md:text-sm font-medium mt-2 flex items-center">
                     <!-- Info Icon -->
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     长按保存或复制 SVG
