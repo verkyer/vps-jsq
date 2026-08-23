@@ -29,13 +29,13 @@ input[type="date"],
     font-feature-settings: "tnum" 1, "lnum" 1;
 }
 
-/* \u8f93\u5165\u6846\u975e\u6cd5\u72b6\u6001\uff08\u8d1f\u6570 / \u975e\u6570\u5b57\uff09 */
+/* 输入框非法状态（负数 / 非数字） */
 .input-invalid {
     border-color: #ef4444 !important;
     box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25) !important;
 }
 
-/* \u590d\u5236\u6210\u529f\u540e\u7684\u6309\u94ae\u53cd\u9988 */
+/* 复制成功后的按钮反馈 */
 .btn-copied {
     background-color: #f59e0b !important;
     border-color: #f59e0b !important;
@@ -45,7 +45,7 @@ input[type="date"],
 
 .action-btn {
     border: 1px solid transparent;
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
 }
 
 .action-btn svg {
@@ -61,40 +61,45 @@ input[type="date"],
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.28);
 }
 
+/* 操作条：磨砂玻璃 */
 .action-bar {
     min-height: 32px;
-    border-radius: 0.25rem;
+    border-radius: 0.625rem;
     box-shadow: none;
+    -webkit-backdrop-filter: blur(14px) saturate(1.5);
+    backdrop-filter: blur(14px) saturate(1.5);
 }
 
 html.dark .action-bar {
-    background-color: transparent;
-    border-color: #3f3f46;
-    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 html:not(.dark) .action-bar {
-    background-color: #ffffff;
-    border-color: rgba(203, 213, 225, 0.85);
-    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(148, 163, 184, 0.42);
+    box-shadow:
+        0 1px 3px rgba(15, 23, 42, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 html:not(.dark) .action-bar .action-btn {
-    background-color: #ffffff;
-    border-color: transparent;
-    color: #64748b;
-    box-shadow: none;
-}
-
-html:not(.dark) .action-bar .action-btn:hover {
-    background-color: rgba(248, 250, 252, 0.86);
+    background-color: transparent;
     border-color: transparent;
     color: #475569;
     box-shadow: none;
 }
 
+html:not(.dark) .action-bar .action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: transparent;
+    color: #475569;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
 html:not(.dark) .action-bar .action-separator {
-    background-color: rgba(203, 213, 225, 0.68);
+    background-color: rgba(148, 163, 184, 0.4);
 }
 
 .field-icon {
@@ -168,11 +173,11 @@ html.dark .icon-value {
 }
 
 #resultCard .result-divider {
-    background-color: rgba(226, 232, 240, 0.55);
+    background-color: rgba(148, 163, 184, 0.28);
 }
 
 html.dark #resultCard .result-divider {
-    background-color: rgb(63, 63, 70);
+    background-color: rgba(255, 255, 255, 0.09);
 }
 
 #resultCard .quote-panel {
@@ -218,7 +223,7 @@ html.dark .quote-icon {
 
 .quote-input.premium-neutral {
     color: #64748b !important;
-    border-color: #e2e8f0 !important;
+    border-color: rgba(148, 163, 184, 0.35) !important;
     opacity: 0.62;
 }
 
@@ -234,7 +239,7 @@ html.dark .quote-input.premium-negative {
 
 html.dark .quote-input.premium-neutral {
     color: #a1a1aa !important;
-    border-color: #3f3f46 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
     opacity: 0.58;
 }
 
@@ -250,58 +255,140 @@ html.dark .quote-sale-input {
 
 .quote-panel .quote-sale-input.sale-neutral {
     color: #64748b !important;
-    border-color: #e2e8f0 !important;
+    border-color: rgba(148, 163, 184, 0.35) !important;
     opacity: 0.68;
 }
 
 html.dark .quote-panel .quote-sale-input.sale-neutral {
     color: #a1a1aa !important;
-    border-color: #3f3f46 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
     opacity: 0.62;
 }
 
-/* Dark Mode Background */
-html.dark body {
-    background-color: #17171c;
-    background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-        linear-gradient(to bottom, #1e1e24, #17171c);
-    background-size: 20px 20px, 100% 100%;
+/* ============ macOS 磨砂玻璃主题 ============ */
+
+/* 浅色底纹：淡雅白 + 网格线条（中心可见、四周渐隐） */
+html:not(.dark) body {
+    background-color: #f5f5f7;
+    background-image:
+        radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(245, 245, 247, 0.92) 88%),
+        radial-gradient(52rem 26rem at 50% -12%, rgba(255, 255, 255, 0.7), transparent 62%),
+        linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #fafafb 0%, #f0f0f4 100%);
+    background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px, 100% 100%;
     background-attachment: fixed;
 }
 
-/* Light Mode Background */
-html:not(.dark) body {
-    background-color: #f0f2f5;
-    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-    background-size: 20px 20px;
+/* 深色底纹：近黑渐变 + 网格线条（中心可见、四周渐隐） */
+html.dark body {
+    background-color: #0d0d10;
+    background-image:
+        radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(13, 13, 16, 0.92) 88%),
+        radial-gradient(52rem 26rem at 50% -12%, rgba(255, 255, 255, 0.045), transparent 62%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #141418 0%, #0b0b0e 100%);
+    background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-attachment: fixed;
 }
 
-/* Metal Card Effect */
-.dark .metal-card-border {
-    box-shadow: 
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 20px 40px rgba(0, 0, 0, 0.8);
+/* 主卡片：磨砂玻璃 */
+#mainCard {
+    border-radius: 20px;
+    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    backdrop-filter: blur(30px) saturate(1.8);
 }
 
 html:not(.dark) #mainCard {
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+    background-color: rgba(255, 255, 255, 0.52);
+    border-color: rgba(255, 255, 255, 0.72);
+    box-shadow:
+        0 16px 40px -18px rgba(15, 23, 42, 0.16),
+        0 3px 12px -4px rgba(15, 23, 42, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
+html.dark #mainCard {
+    background-color: rgba(34, 34, 42, 0.52);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 16px 44px -18px rgba(0, 0, 0, 0.5),
+        0 3px 12px -4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* 左右分区的玻璃色调：左侧更通透、右侧更实，拉开层级 */
+html:not(.dark) #mainCard > section:first-of-type {
+    background-color: rgba(248, 250, 252, 0.26);
+    border-color: rgba(148, 163, 184, 0.22);
+}
+
+html:not(.dark) #resultCard {
+    background-color: rgba(255, 255, 255, 0.58);
+}
+
+html.dark #mainCard > section:first-of-type {
+    background-color: rgba(18, 18, 24, 0.14);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark #resultCard {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 输入控件：玻璃质感（汇率输入框保持透明底线样式） */
+html:not(.dark) #calcForm input[type="number"]:not(#customRate),
+html:not(.dark) #calcForm input[type="date"],
+html:not(.dark) #calcForm select {
+    background-color: rgba(255, 255, 255, 0.62);
+    border-color: rgba(148, 163, 184, 0.38);
+}
+
+html.dark #calcForm input[type="number"]:not(#customRate),
+html.dark #calcForm input[type="date"],
+html.dark #calcForm select {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* 报价输入框：玻璃质感 */
+html:not(.dark) .quote-input {
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+html.dark .quote-input {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 主题切换开关：玻璃质感 */
+html:not(.dark) #themeToggle {
+    background-color: rgba(148, 163, 184, 0.35);
+}
+
+html.dark #themeToggle {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+/* 卡片顶部高光线条 */
 .metal-card-top-line::after {
     content: '';
     position: absolute;
     top: -1px;
-    left: 20px;
-    right: 20px;
+    left: 24px;
+    right: 24px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+    background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.55), transparent);
+}
+
+html.dark .metal-card-top-line::after {
+    background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.35), transparent);
 }
 
 /* Cycle Radio Button Styling */
 /* 6 个付款周期按钮共用：抽出长串 Tailwind 工具类，瘦身 HTML */
 .cycle-option {
-    @apply py-1.5 md:py-2.5 text-center rounded text-xs md:text-sm transition-all border bg-white border-slate-200 text-slate-500 hover:bg-slate-100 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:border-zinc-500;
+    @apply py-1.5 md:py-2.5 text-center rounded-md text-xs md:text-sm transition-all border bg-white/60 border-slate-300/50 text-slate-500 hover:bg-white/90 dark:bg-white/5 dark:border-white/10 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:border-white/20;
 }
 
 .cycle-radio + div {
@@ -310,24 +397,25 @@ html:not(.dark) #mainCard {
 }
 
 .cycle-radio:checked + div {
-    background-color: #fff;
-    color: #f59e0b;
+    background-color: rgba(245, 158, 11, 0.12);
+    color: #d97706;
     font-weight: 700;
-    border-color: #f59e0b;
-    box-shadow: inset 0 0 0 1px #f59e0b;
+    border-color: rgba(245, 158, 11, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.35);
 }
 
 html.dark .cycle-radio:checked + div {
-    background-color: #3f3f46;
-    color: #a1a1aa;
-    border-color: #71717a;
-    box-shadow: inset 0 0 0 1px #71717a;
+    background-color: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+    font-weight: 700;
+    border-color: rgba(251, 191, 36, 0.45);
+    box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.28);
 }
 
 /* Value Glow Effect */
 .dark .value-glow {
-    text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
-    background: linear-gradient(180deg, #fff 0%, #f59e0b 100%);
+    text-shadow: 0 0 24px rgba(245, 158, 11, 0.35);
+    background: linear-gradient(180deg, #fff 0%, #fbbf24 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -452,9 +540,9 @@ input[type="number"] {
     right: 0;
     bottom: 0;
     left: 0;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.25rem;
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.38);
+    border-radius: 0.375rem;
     pointer-events: none;
     box-sizing: border-box;
     z-index: 1;
@@ -468,15 +556,27 @@ input[type="number"] {
 }
 html.dark.is-firefox .date-display-value,
 html.dark .date-display-value.date-display-export {
-    background: #1d1d22;
-    border-color: #3f3f46;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
     color: #d4d4d8;
+}
+
+/*
+ * 导出专用：html-to-image 序列化会丢失原生日历图标的透明样式，
+ * 覆盖层必须不透明才能完全遮住原生输入的文字与图标。
+ */
+.date-display-value.date-display-export {
+    background-color: #f9fafb;
+}
+
+html.dark .date-display-value.date-display-export {
+    background-color: #27272d;
 }
 .is-firefox .group:focus-within .date-display-value {
     border-color: #f59e0b;
 }
 html.dark.is-firefox .group:focus-within .date-display-value {
-    border-color: #71717a;
+    border-color: rgba(255, 255, 255, 0.28);
 }
 .is-firefox .date-input-ff-mask {
     display: none;
@@ -555,20 +655,78 @@ html.dark .date-native-input {
     text-align: left;
 }
 
-/* 生成图片时隐藏右侧顶部多余间距（仅 mobile） */
+/*
+ * 生成图片导出：html-to-image 不支持 backdrop-filter，
+ * 导出时关闭模糊并使用与页面一致的渐变底（无斑点），玻璃面板以半透明叠加呈现。
+ */
 #captureRoot.exporting {
     box-sizing: content-box;
     padding: 16px 12px 12px;
-    background-color: #f0f2f5;
-    background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.8px);
-    background-size: 20px 20px;
+    background-color: #f5f5f7;
+    background-image:
+        radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(245, 245, 247, 0.92) 88%),
+        linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #fafafb 0%, #f0f0f4 100%);
+    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
 }
 html.dark #captureRoot.exporting {
-    background-color: #17171c;
+    background-color: #0d0d10;
     background-image:
-        radial-gradient(rgba(255, 255, 255, 0.12) 0.7px, transparent 0.8px),
-        linear-gradient(to bottom, #1e1e24, #17171c);
-    background-size: 20px 20px, 100% 100%;
+        radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(13, 13, 16, 0.92) 88%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, #141418 0%, #0b0b0e 100%);
+    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+}
+#mainCard.exporting {
+    transition: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/*
+ * 导出阴影：负扩散 + 非整数缩放比下 html-to-image 会把阴影画偏，
+ * 导出时换成无扩散的轻阴影，避免某些宽度下卡片底部阴影错位。
+ */
+html:not(.dark) #mainCard.exporting {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+html.dark #mainCard.exporting {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/*
+ * 导出纯色化：html-to-image 不支持 backdrop-filter，半透明玻璃层
+ * 会让网格底纹直接透过卡片显脏（浅色左侧 / 深色右侧尤其明显）。
+ * 导出时卡片与左右分区全部换成预合成纯色，分区间不再使用 1px 描边
+ * （序列化后 overflow 圆角裁剪不可靠，边线会戳出卡片圆角），边界由色差呈现。
+ */
+html:not(.dark) #mainCard.exporting {
+    background-color: #f7f8fa;
+}
+
+html:not(.dark) #mainCard.exporting > section:first-of-type {
+    background-color: #eff1f4;
+    border-color: transparent;
+}
+
+html:not(.dark) #mainCard.exporting #resultCard {
+    background-color: #fcfcfe;
+}
+
+html.dark #mainCard.exporting {
+    background-color: #1b1b21;
+}
+
+html.dark #mainCard.exporting > section:first-of-type {
+    background-color: #191920;
+    border-color: transparent;
+}
+
+html.dark #mainCard.exporting #resultCard {
+    background-color: #222228;
 }
 @media (min-width: 768px) {
     #captureRoot.exporting {
@@ -586,6 +744,15 @@ html.dark #captureRoot.exporting {
 #mainCard.exporting.quote-export-empty #resultCard .quote-divider,
 #mainCard.exporting.quote-export-empty #resultCard .quote-panel {
     display: none;
+}
+
+/*
+ * 生成图片时报价区（溢价/售价）沿用编辑态样式：
+ * 保持带边框的两列输入框，仅仅把框内数值设为左对齐。
+ * 不再重绘成大数字/徽章样式，与线上版本保持一致。
+ */
+#mainCard.exporting .quote-input {
+    text-align: left;
 }
 
 @media (min-width: 768px) {

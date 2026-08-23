@@ -24,12 +24,12 @@
             z-index: 9999;
             display: grid;
             place-items: center;
-            background: #f0f2f5;
+            background: #f5f5f7;
             transition: opacity 120ms ease, visibility 120ms ease;
         }
 
         html.dark .app-loader {
-            background: #17171c;
+            background: #0d0d10;
         }
 
         .app-loader.is-hidden {
@@ -114,7 +114,7 @@
                             <div class="relative">
                                 <span class="symbol-display absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 font-medium tabular-nums text-base md:text-lg z-10 pointer-events-none transition-colors">$</span>
                                 <input type="number" id="price" step="1" 
-                                    class="w-full h-10 md:h-12 pl-8 md:pl-10 pr-2 md:pr-4 rounded text-base md:text-xl font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-black/80 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-white/90 dark:focus:border-zinc-500 dark:focus:ring-0" 
+                                    class="w-full h-10 md:h-12 pl-8 md:pl-10 pr-2 md:pr-4 rounded-md text-base md:text-xl font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-black/80 focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-white/90 dark:focus:border-zinc-500 dark:focus:ring-0" 
                                     placeholder="0.00">
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                             </div>
                             <div class="relative">
                                 <select id="currency" 
-                                    class="select-centered w-full h-10 md:h-12 pl-3 md:pl-4 pr-8 rounded text-sm md:text-base font-medium cursor-pointer appearance-none transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500">
+                                    class="select-centered w-full h-10 md:h-12 pl-3 md:pl-4 pr-8 rounded-md text-sm md:text-base font-medium cursor-pointer appearance-none transition-all outline-none bg-white border border-slate-300 text-slate-800 focus:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-200 dark:focus:border-zinc-500">
                                     <option value="CNY">CNY 人民币</option>
                                     <option value="USD" selected>USD 美元</option>
                                     <option value="EUR">EUR 欧元</option>
@@ -177,7 +177,7 @@
                                 到期日期
                             </label>
                             <div class="relative date-input-wrapper">
-                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-8 md:pr-12 rounded text-xs md:text-sm font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <input type="date" id="dueDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-8 md:pr-12 rounded-md text-xs md:text-sm font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
                                 <span class="date-display-value text-xs md:text-sm font-medium tabular-nums" aria-hidden="true"></span>
                                 <span class="date-input-ff-mask" aria-hidden="true"></span>
                                 <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
@@ -195,7 +195,7 @@
                                 交易日期
                             </label>
                             <div class="relative date-input-wrapper">
-                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-8 md:pr-12 rounded text-xs md:text-sm font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
+                                <input type="date" id="tradeDate" class="date-native-input w-full h-10 md:h-12 pl-3 md:pl-5 pr-8 md:pr-12 rounded-md text-xs md:text-sm font-medium tabular-nums transition-all outline-none bg-white border border-slate-300 text-slate-800 group-focus-within:border-amber-500 dark:bg-[#1d1d22] dark:border-zinc-700 dark:text-zinc-300 dark:group-focus-within:border-zinc-500">
                                 <span class="date-display-value text-xs md:text-sm font-medium tabular-nums" aria-hidden="true"></span>
                                 <span class="date-input-ff-mask" aria-hidden="true"></span>
                                 <span class="date-input-icon absolute right-3 md:right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 dark:text-zinc-500 cursor-pointer" style="opacity:0.85" aria-hidden="true">
@@ -294,7 +294,7 @@
                             </label>
                             <div class="quote-input-wrap relative flex-1 min-w-0">
                                 <span class="quote-prefix absolute left-2 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 dark:text-zinc-600 pointer-events-none transition-colors">¥</span>
-                                <input type="number" id="premiumInput" step="0.01" class="quote-input quote-premium-input w-full h-7 md:h-8 pl-5 pr-2 rounded border text-xs md:text-sm font-bold tabular-nums text-right outline-none transition-all bg-slate-50/80 border-slate-200 text-emerald-600 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-zinc-800/40 dark:border-zinc-700 dark:text-emerald-400 dark:focus:bg-zinc-800 dark:focus:border-zinc-500 dark:focus:ring-0" placeholder="0.00" inputmode="decimal">
+                                <input type="number" id="premiumInput" step="0.01" class="quote-input quote-premium-input w-full h-7 md:h-8 pl-5 pr-2 rounded-md border text-xs md:text-sm font-bold tabular-nums text-left outline-none transition-all bg-slate-50/80 border-slate-200 text-emerald-600 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-zinc-800/40 dark:border-zinc-700 dark:text-emerald-400 dark:focus:bg-zinc-800 dark:focus:border-zinc-500 dark:focus:ring-0" placeholder="0.00" inputmode="decimal">
                             </div>
                         </div>
                         <div class="quote-field group min-w-0 flex items-center gap-2">
@@ -302,11 +302,11 @@
                                 <svg class="quote-icon sale-icon w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                     <path d="M6 7h12M8 12h8M10 17h4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
                                 </svg>
-                                售价
-                            </label>
+                                总价
+                             </label>
                             <div class="quote-input-wrap relative flex-1 min-w-0">
                                 <span class="quote-prefix absolute left-2 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 dark:text-zinc-600 pointer-events-none transition-colors">¥</span>
-                                <input type="number" id="salePriceInput" step="0.01" class="quote-input quote-sale-input w-full h-7 md:h-8 pl-5 pr-2 rounded border text-xs md:text-sm font-bold tabular-nums text-right outline-none transition-all bg-slate-50/80 border-slate-200 text-violet-700 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-zinc-800/40 dark:border-zinc-700 dark:text-violet-300 dark:focus:bg-zinc-800 dark:focus:border-zinc-500 dark:focus:ring-0" placeholder="0.00" inputmode="decimal">
+                                <input type="number" id="salePriceInput" step="0.01" class="quote-input quote-sale-input w-full h-7 md:h-8 pl-5 pr-2 rounded-md border text-xs md:text-sm font-bold tabular-nums text-left outline-none transition-all bg-slate-50/80 border-slate-200 text-violet-700 focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 dark:bg-zinc-800/40 dark:border-zinc-700 dark:text-violet-300 dark:focus:bg-zinc-800 dark:focus:border-zinc-500 dark:focus:ring-0" placeholder="0.00" inputmode="decimal">
                             </div>
                         </div>
                     </div>
@@ -331,7 +331,7 @@
         </div>
 
         <div id="footerWrap" class="mt-2 text-center">
-            <span class="text-[10px] md:text-[13px] text-slate-400 dark:text-zinc-600 font-medium tabular-nums transition-colors"><a href="https://github.com/verkyer/vps-jsq" target="_blank" class="hover:text-amber-500 transition-colors">VPS-JSQ</a> v1.4.0 / <a href="https://www.xiaoge.org/" target="_blank" class="hover:text-amber-500 transition-colors">@XiaoGe</a>.</span>
+            <span class="text-[10px] md:text-[13px] text-slate-400 dark:text-zinc-600 font-medium tabular-nums transition-colors"><a href="https://github.com/verkyer/vps-jsq" target="_blank" class="hover:text-amber-500 transition-colors">VPS-JSQ</a> v1.4.1 / <a href="https://www.xiaoge.org/" target="_blank" class="hover:text-amber-500 transition-colors">@XiaoGe</a>.</span>
         </div>
 
     </main>

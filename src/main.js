@@ -1,4 +1,4 @@
-﻿import './style.css';
+import './style.css';
 
 // Firefox 检测：为 html 添加标识类，供 CSS 针对性处理原生控件差异
 if (typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent)) {
@@ -802,7 +802,7 @@ function copyResult() {
 - 💰 续费价格：${price} ${currency}/${cycleText}（约 ${cnyPrice} 元）
 - ⏳ 剩余天数：${days}天（${dueDate} 到期）
 - 💎 剩余价值：${valCNY}元（约 ${valOrig} ${currency}）
-- 🧾 溢价 / 售价：${premium}元 / ${salePrice}元`;
+- 🧾 溢价 / 总价：${premium}元 / ${salePrice}元`;
 
     copyTextToClipboard(md, flashCopyButton);
 }
