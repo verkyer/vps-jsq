@@ -503,6 +503,25 @@ input[type="number"] {
     opacity: 0;
 }
 
+/*
+ * Firefox（Gecko）原生日历指示器遵循 -moz 前缀，且仅在未启用 is-firefox
+ * 类时（如响应式模式把 UA 模拟成 iOS Safari）才会露出。这里同样隐藏，
+ * 避免它和自定义 .date-input-icon 叠加成“多余的日历图标”。
+ */
+.date-native-input::-moz-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.5rem;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: transparent;
+    cursor: pointer;
+    opacity: 0;
+}
+
 /* 默认隐藏 Firefox 遮罩 */
 .date-input-ff-mask {
     display: none;
@@ -555,11 +574,54 @@ html.dark .date-display-value.date-display-export {
 }
 
 /*
+ * 兜底：Firefox 响应式模式会把 UA 模拟成 iOS Safari，导致 is-firefox 类不添加，
+ * 原生 Gecko 日期控件连同原生日历图标会直接露出（即日期框中间那个多余图标）。
+ * @supports(-moz-appearance:none) 只匹配 Gecko 引擎，与 UA 无关；命中时让
+ * 日期框也走自绘显示层，隐藏原生控件，只保留右侧自定义 .date-input-icon。
+ */
+@supports (-moz-appearance: none) {
+    .date-native-input {
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .date-input-wrapper {
+        cursor: pointer;
+    }
+    .date-display-value {
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.62);
+        border: 1px solid rgba(148, 163, 184, 0.38);
+        border-radius: 0.375rem;
+        pointer-events: none;
+        box-sizing: border-box;
+        z-index: 1;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+        padding: 0.625rem 2.5rem 0.625rem 0.75rem;
+        color: #1e293b;
+    }
+    html.dark .date-display-value {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+        color: #d4d4d8;
+    }
+}
+
+/*
  * 导出专用：html-to-image 序列化会丢失原生日历图标的透明样式，
- * 这里保持与编辑模式一致的底色，避免截图后颜色跳变。
+ * 覆盖层必须不透明：Firefox 下半透明会透出原生日历控件残影，导致日期重叠。
+ * 这里用预合成色贴近编辑态玻璃底，深色则与编辑态的 #1d1d22 保持一致。
  */
 .date-display-value.date-display-export {
-    background-color: rgba(255, 255, 255, 0.62);
+    background-color: #f9fafb;
 }
 
 html.dark .date-display-value.date-display-export {
@@ -659,19 +721,21 @@ html.dark .date-native-input {
     background-color: #f5f5f7;
     background-image:
         radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(245, 245, 247, 0.92) 88%),
-        linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0V24' fill='none' stroke='rgba(15,23,42,.05)' stroke-width='1'/%3E%3C/svg%3E"),
         linear-gradient(180deg, #fafafb 0%, #f0f0f4 100%);
-    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-size: 100% 100%, 24px 24px, 100% 100%;
+    background-position: 0 0, 0 0, 0 0;
+    background-repeat: no-repeat, repeat, no-repeat;
 }
 html.dark #captureRoot.exporting {
     background-color: #0d0d10;
     background-image:
         radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(13, 13, 16, 0.92) 88%),
-        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0V24' fill='none' stroke='rgba(255,255,255,.05)' stroke-width='1'/%3E%3C/svg%3E"),
         linear-gradient(180deg, #141418 0%, #0b0b0e 100%);
-    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-size: 100% 100%, 24px 24px, 100% 100%;
+    background-position: 0 0, 0 0, 0 0;
+    background-repeat: no-repeat, repeat, no-repeat;
 }
 #mainCard.exporting {
     transition: none !important;
