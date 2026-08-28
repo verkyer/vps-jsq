@@ -329,7 +329,7 @@ html:not(.dark) #resultCard {
 }
 
 html.dark #mainCard > section:first-of-type {
-    background-color: rgba(18, 18, 24, 0.14);
+    background-color: rgba(38, 38, 44, 0.3);
     border-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -345,13 +345,6 @@ html:not(.dark) #calcForm select {
     border-color: rgba(148, 163, 184, 0.38);
 }
 
-html.dark #calcForm input[type="number"]:not(#customRate),
-html.dark #calcForm input[type="date"],
-html.dark #calcForm select {
-    background-color: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
-}
-
 /* 报价输入框：玻璃质感 */
 html:not(.dark) .quote-input {
     background-color: rgba(255, 255, 255, 0.55);
@@ -363,11 +356,11 @@ html.dark .quote-input {
 
 /* 主题切换开关：玻璃质感 */
 html:not(.dark) #themeToggle {
-    background-color: rgba(148, 163, 184, 0.35);
+    background-color: #cbd5e1;
 }
 
 html.dark #themeToggle {
-    background-color: rgba(255, 255, 255, 0.14);
+    background-color: #3f3f46;
 }
 
 /* 卡片顶部高光线条 */
@@ -563,14 +556,15 @@ html.dark .date-display-value.date-display-export {
 
 /*
  * 导出专用：html-to-image 序列化会丢失原生日历图标的透明样式，
- * 覆盖层必须不透明才能完全遮住原生输入的文字与图标。
+ * 这里保持与编辑模式一致的底色，避免截图后颜色跳变。
  */
 .date-display-value.date-display-export {
-    background-color: #f9fafb;
+    background-color: rgba(255, 255, 255, 0.62);
 }
 
 html.dark .date-display-value.date-display-export {
-    background-color: #27272d;
+    background-color: #1d1d22;
+    border-color: #3f3f46;
 }
 .is-firefox .group:focus-within .date-display-value {
     border-color: #f59e0b;
@@ -717,16 +711,16 @@ html:not(.dark) #mainCard.exporting #resultCard {
 }
 
 html.dark #mainCard.exporting {
-    background-color: #1b1b21;
+    background-color: #18181e;
 }
 
 html.dark #mainCard.exporting > section:first-of-type {
-    background-color: #191920;
+    background-color: #1d1d24;
     border-color: transparent;
 }
 
 html.dark #mainCard.exporting #resultCard {
-    background-color: #222228;
+    background-color: #242429;
 }
 @media (min-width: 768px) {
     #captureRoot.exporting {
