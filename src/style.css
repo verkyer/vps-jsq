@@ -304,8 +304,8 @@ html:not(.dark) #mainCard {
     background-color: rgba(255, 255, 255, 0.52);
     border-color: rgba(255, 255, 255, 0.72);
     box-shadow:
-        0 16px 40px -18px rgba(15, 23, 42, 0.16),
-        0 3px 12px -4px rgba(15, 23, 42, 0.05),
+        0 10px 24px rgba(15, 23, 42, 0.1),
+        0 2px 8px rgba(15, 23, 42, 0.05),
         inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
@@ -313,8 +313,8 @@ html.dark #mainCard {
     background-color: rgba(34, 34, 42, 0.52);
     border-color: rgba(255, 255, 255, 0.1);
     box-shadow:
-        0 16px 44px -18px rgba(0, 0, 0, 0.5),
-        0 3px 12px -4px rgba(0, 0, 0, 0.3),
+        0 10px 26px rgba(0, 0, 0, 0.38),
+        0 2px 8px rgba(0, 0, 0, 0.24),
         inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
@@ -402,6 +402,20 @@ html.dark .cycle-radio:checked + div {
     font-weight: 700;
     border-color: rgba(251, 191, 36, 0.45);
     box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.45);
+}
+
+/*
+ * 导出态：html-to-image 在 WebKit 下会把外扩 box-shadow 放大成粗描边，
+ * 所以导出时改用稳定渲染的 border，视觉厚度与编辑态（1px 边框 + 1px 外扩）一致。
+ */
+#mainCard.exporting .cycle-radio:checked + div {
+    border-width: 2px;
+    box-shadow: none;
+}
+
+/* 导出态禁用周期按钮过渡，避免 html-to-image 截到切换动画中的中间值 */
+#mainCard.exporting .cycle-option {
+    transition: none !important;
 }
 
 /* Value Glow Effect */
@@ -715,27 +729,58 @@ html.dark .date-native-input {
  * 导出时关闭模糊并使用与页面一致的渐变底（无斑点），玻璃面板以半透明叠加呈现。
  */
 #captureRoot.exporting {
-    box-sizing: content-box;
     padding: 16px 12px 12px;
     background-color: #f5f5f7;
     background-image:
         radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(245, 245, 247, 0.92) 88%),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0V24' fill='none' stroke='rgba(15,23,42,.05)' stroke-width='1'/%3E%3C/svg%3E"),
+        radial-gradient(52rem 26rem at 50% -12%, rgba(255, 255, 255, 0.7), transparent 62%),
+        linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
         linear-gradient(180deg, #fafafb 0%, #f0f0f4 100%);
-    background-size: 100% 100%, 24px 24px, 100% 100%;
-    background-position: 0 0, 0 0, 0 0;
-    background-repeat: no-repeat, repeat, no-repeat;
+    background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat, repeat, repeat, no-repeat;
 }
 html.dark #captureRoot.exporting {
     background-color: #0d0d10;
     background-image:
         radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(13, 13, 16, 0.92) 88%),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 0H0V24' fill='none' stroke='rgba(255,255,255,.05)' stroke-width='1'/%3E%3C/svg%3E"),
+        radial-gradient(52rem 26rem at 50% -12%, rgba(255, 255, 255, 0.045), transparent 62%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(180deg, #141418 0%, #0b0b0e 100%);
-    background-size: 100% 100%, 24px 24px, 100% 100%;
-    background-position: 0 0, 0 0, 0 0;
-    background-repeat: no-repeat, repeat, no-repeat;
+    background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat, repeat, repeat, no-repeat;
 }
+
+/*
+ * Firefox（Gecko）下 html-to-image 序列化多层 linear-gradient 平铺背景会错位，
+ * 这里用单张 SVG 网格替代；Safari/Chrome 走上面的 linear-gradient（与编辑态一致）。
+ */
+@supports (-moz-appearance: none) {
+    #captureRoot.exporting {
+        background-image:
+            radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(245, 245, 247, 0.92) 88%),
+            radial-gradient(52rem 26rem at 50% -12%, rgba(255, 255, 255, 0.7), transparent 62%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Cpath d='M24 0H0V24' fill='none' stroke='rgba(15,23,42,.05)' stroke-width='1'/%3E%3C/svg%3E"),
+            linear-gradient(180deg, #fafafb 0%, #f0f0f4 100%);
+        background-size: 100% 100%, 100% 100%, 24px 24px, 100% 100%;
+        background-position: 0 0, 0 0, 0 0, 0 0;
+        background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+    }
+    html.dark #captureRoot.exporting {
+        background-image:
+            radial-gradient(ellipse 110% 85% at 50% 22%, transparent 32%, rgba(13, 13, 16, 0.92) 88%),
+            radial-gradient(52rem 26rem at 50% -12%, rgba(255, 255, 255, 0.045), transparent 62%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' shape-rendering='crispEdges'%3E%3Cpath d='M24 0H0V24' fill='none' stroke='rgba(255,255,255,.05)' stroke-width='1'/%3E%3C/svg%3E"),
+            linear-gradient(180deg, #141418 0%, #0b0b0e 100%);
+        background-size: 100% 100%, 100% 100%, 24px 24px, 100% 100%;
+        background-position: 0 0, 0 0, 0 0, 0 0;
+        background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+    }
+}
+
 #mainCard.exporting {
     transition: none !important;
     -webkit-backdrop-filter: none !important;
@@ -743,15 +788,24 @@ html.dark #captureRoot.exporting {
 }
 
 /*
- * 导出阴影：负扩散 + 非整数缩放比下 html-to-image 会把阴影画偏，
- * 导出时换成无扩散的轻阴影，避免某些宽度下卡片底部阴影错位。
+ * 导出阴影：html-to-image 在 WebKit/Safari 下会丢弃 box-shadow，filter 也可能
+ * 因克隆节点离屏而不渲染。因此用 JS 预生成一张投影 PNG 贴到卡片后，位图在
+ * 所有浏览器都会渲染同一张，保证跨端一致。编辑态 box-shadow 必须清空，避免
+ * Chromium 叠加出双重阴影。
  */
-html:not(.dark) #mainCard.exporting {
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-}
-
+html:not(.dark) #mainCard.exporting,
 html.dark #mainCard.exporting {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+}
+.export-card-shadow {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
 }
 
 /*

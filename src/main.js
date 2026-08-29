@@ -457,6 +457,53 @@ function prepareNumberInputsForExport(node) {
     };
 }
 
+/*
+ * 用 Canvas 预生成一张卡片投影 PNG 贴到卡片后：html-to-image 渲染的是同一张
+ * 位图，不受 Safari 丢弃 box-shadow / 离屏下 filter 不渲染的影响，保证跨端一致。
+ */
+function prepareExportShadow(root, mainCard) {
+    const rootRect = root.getBoundingClientRect();
+    const cardRect = mainCard.getBoundingClientRect();
+    const pad = 24;
+    const width = Math.max(1, Math.ceil(cardRect.width) + pad * 2);
+    const height = Math.max(1, Math.ceil(cardRect.height) + pad * 2);
+    const radius = 22;
+    const isDark = document.documentElement.classList.contains('dark');
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.save();
+    ctx.shadowColor = isDark ? 'rgba(0, 0, 0, 0.42)' : 'rgba(15, 23, 42, 0.2)';
+    ctx.shadowBlur = 26;
+    ctx.shadowOffsetY = 8;
+    ctx.fillStyle = isDark ? '#18181e' : '#f7f8fa';
+    const x = pad;
+    const y = pad;
+    const rw = cardRect.width;
+    const rh = cardRect.height;
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + rw, y, x + rw, y + rh, radius);
+    ctx.arcTo(x + rw, y + rh, x, y + rh, radius);
+    ctx.arcTo(x, y + rh, x, y, radius);
+    ctx.arcTo(x, y, x + rw, y, radius);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    const url = canvas.toDataURL('image/png');
+    const shadow = document.createElement('div');
+    shadow.className = 'export-card-shadow';
+    shadow.style.left = `${cardRect.left - rootRect.left - pad}px`;
+    shadow.style.top = `${cardRect.top - rootRect.top - pad}px`;
+    shadow.style.width = `${width}px`;
+    shadow.style.height = `${height}px`;
+    shadow.style.backgroundImage = `url(${url})`;
+    root.insertBefore(shadow, mainCard);
+    return () => { shadow.remove(); };
+}
+
 function prepareQuoteSectionForExport(mainCard) {
     const premium = parseQuoteValue(els.premiumInput.value);
     const shouldHideQuote = !Number.isFinite(premium) || premium === 0;
@@ -900,6 +947,7 @@ async function generateImage() {
         const restoreDateInputs = prepareDateInputsForExport(mainCard);
         const restoreNumberInputs = prepareNumberInputsForExport(mainCard);
         const restoreSelectInputs = prepareSelectInputsForExport(mainCard);
+        const restoreExportShadow = prepareExportShadow(node, mainCard);
 
         try {
             const htmlToImage = await getHtmlToImage();
@@ -914,10 +962,10 @@ async function generateImage() {
             const maxRatio = isLowEndDevice
                 ? SHARE_IMAGE_LOW_END_MAX_PIXEL_RATIO
                 : SHARE_IMAGE_MAX_PIXEL_RATIO;
-            const pixelRatio = Math.min(
-                maxRatio,
-                Math.max(SHARE_IMAGE_MIN_PIXEL_RATIO, widthBasedRatio)
-            );
+            // WebKit/Safari 对非整数 pixelRatio 的 box-shadow 与网格平铺渲染不准确，
+            // 会导致导出样式与 Chromium 不一致；这里向上取整为整数，保证跨浏览器一致。
+            const rawRatio = Math.max(SHARE_IMAGE_MIN_PIXEL_RATIO, widthBasedRatio);
+            const pixelRatio = Math.min(maxRatio, Math.ceil(rawRatio));
             const canvas = await htmlToImage.toCanvas(node, {
                 width: Math.ceil(rect.width),
                 height: Math.ceil(rect.height),
@@ -948,6 +996,7 @@ async function generateImage() {
             restoreNumberInputs();
             restoreDateInputs();
             restoreQuoteSection();
+            restoreExportShadow();
             mainCard.classList.remove('exporting');
             node.classList.remove('exporting');
         }
